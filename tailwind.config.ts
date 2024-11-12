@@ -30,6 +30,9 @@ const config: Config = {
       fontFamily: {
         dansans: ["var(--font-dm-sans)"],
       },
+	  backgroundImage: {
+		"node-icon-gradient": "linear-gradient(270deg, #FF884D 0%, #D7875F 100%)",
+      },
       colors: {
         "prompt-card": "rgba(33, 32, 32, 1)",
         "prompt-card-1": "rgba(23, 23, 23, 0.8)",

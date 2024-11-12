@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export default function ChatInterface() {
+export default function ChatInterface({ onSubmit }: { onSubmit: () => void }) {
   return (
     <motion.div
-      className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-2 border-transparent"
+      className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
       animate={{
         borderImage:
           "linear-gradient(469.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
@@ -41,13 +41,13 @@ export default function ChatInterface() {
           <Input
             className={cn(
               "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
-              "text-white placeholder:text-[#808080]",
-              "focus-visible:ring-1 focus-visible:ring-[#F5A623] focus-visible:ring-offset-0"
+              "text-white placeholder:text-[#808080]"
             )}
             placeholder="Type here"
           />
           <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
           <Button
+            onClick={onSubmit} // Trigger the onSubmit function when clicked
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2",
               "bg-prompt-card-icon hover:bg-[#F5A623]/90 text-white rounded-lg px-6"

@@ -4,10 +4,12 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import main from "../../public/main.png";
+import Nodes from "./NodesCard";
 import ChatInterface from "./ChatInputCard";
 
 const Main = () => {
   const [showChat, setShowChat] = useState(false);
+  const [displayNodes, setDisplayNodes] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,6 +18,10 @@ const Main = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSendMessage = () => {
+    setDisplayNodes(true); // Switch to Nodes component
+  };
 
   return (
     <div className="w-full bg-navbar-bg flex items-center justify-center h-screen">
@@ -34,7 +40,11 @@ const Main = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="absolute flex justify-center items-center"
           >
-            <ChatInterface />
+            {displayNodes ? (
+              <Nodes />
+            ) : (
+              <ChatInterface onSubmit={handleSendMessage} />
+            )}
           </motion.div>
         )}
       </motion.div>
