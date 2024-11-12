@@ -25,9 +25,9 @@ export function SidebarComponent() {
   const [activeItem, setActiveItem] = React.useState("dashboard");
   console.log(activeItem);
   return (
-    <div className="w-60">
+    <div className="w-60 bg-black">
       <SidebarProvider>
-        <Sidebar className="text-white mt-16 border-none">
+        <Sidebar className="text-white mt-16 border-none w-60">
           <SidebarContent className="bg-black">
             <SidebarMenu className="mt-16">
               {menuItems.map((item) => (
