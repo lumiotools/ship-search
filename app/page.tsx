@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <div className="flex flex-col">
         <Navbar></Navbar>
-        <div className="flex items-center justify-center w-full">
+        <div className="flex items-center justify-center w-full h-screen">
           <SidebarComponent></SidebarComponent>
           <Main></Main>
         </div>

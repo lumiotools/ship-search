@@ -13,7 +13,7 @@ const Main = () => {
         animate={{ scale: 1, rotate: 360 }} 
         transition={{ duration: 1.5, ease: "easeOut" }}
       >
-        <Image src={main} alt='' className=''/>
+        <Image src={main} alt='' className='p-8 mt-10'/>
       </motion.div>
     </div>
   )
