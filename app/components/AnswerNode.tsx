@@ -49,7 +49,7 @@ export default function AnswerNode() {
               <div className="flex gap-5">
                 <div className="flex flex-col p-3 gap-3 bg-answer-node-1 text-white rounded-xl">
                   <h2 className="text-sm">
-                    Leverage Shippo's Discounted Rates
+                    Leverage Shippo&apos;s Discounted Rates
                   </h2>
                   <p className="text-xs text-white/60">
                     Shippo offers discounted rates with major carriers,
@@ -60,7 +60,7 @@ export default function AnswerNode() {
                 </div>
                 <div className="flex flex-col p-3 gap-3 bg-answer-node-2 text-white rounded-xl">
                   <h2 className="text-sm">
-                    Leverage Shippo's Discounted Rates
+                    Leverage Shippo&apos;s Discounted Rates
                   </h2>
                   <p className="text-xs text-white/60">
                     Shippo offers discounted rates with major carriers,
@@ -74,7 +74,7 @@ export default function AnswerNode() {
               <div className="flex gap-5">
                 <div className="flex flex-col p-3 gap-3 bg-answer-node-3 text-white rounded-xl">
                   <h2 className="text-sm">
-                    Leverage Shippo's Discounted Rates
+                    Leverage Shippo&apos;s Discounted Rates
                   </h2>
                   <p className="text-xs text-white/60">
                     Shippo offers discounted rates with major carriers,
@@ -85,7 +85,7 @@ export default function AnswerNode() {
                 </div>
                 <div className="flex flex-col p-3 gap-3 bg-answer-node-4 text-white rounded-xl">
                   <h2 className="text-sm">
-                    Leverage Shippo's Discounted Rates
+                    Leverage Shippo&apos;s Discounted Rates
                   </h2>
                   <p className="text-xs text-white/60">
                     Shippo offers discounted rates with major carriers,
