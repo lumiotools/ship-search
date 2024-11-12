@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
   return (
-    <div className="fixed w-full flex items-center justify-between gap-10 shadow-md bg-navbar-bg px-5 py-3">
+    <div className="z-10 fixed w-full flex items-center justify-between gap-10 shadow-md bg-navbar-bg px-5 py-3">
       <div className="flex items-center justify-between gap-10">
         <Image
           src={logo}

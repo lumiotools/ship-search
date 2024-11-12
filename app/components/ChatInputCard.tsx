@@ -1,12 +1,20 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { MessageSquare, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export default function ChatInterface({ onSubmit }: { onSubmit: () => void }) {
+export default function ChatInterface() {
+  const router = useRouter();
+
+  const handleSendMessage = () => {
+    const chatId = Date.now().toString();
+    router.push(`/chat/${chatId}`);
+  };
+
   return (
     <motion.div
       className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
@@ -47,7 +55,7 @@ export default function ChatInterface({ onSubmit }: { onSubmit: () => void }) {
           />
           <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
           <Button
-            onClick={onSubmit} // Trigger the onSubmit function when clicked
+            onClick={handleSendMessage} // Navigate on click
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2",
               "bg-prompt-card-icon hover:bg-[#F5A623]/90 text-white rounded-lg px-6"

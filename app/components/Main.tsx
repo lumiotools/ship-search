@@ -10,26 +10,15 @@ import Nodes from "./NodesCard";
 
 const Main = () => {
   const [showChat, setShowChat] = useState(false);
-  const [displayNodes, setDisplayNodes] = useState(false);
-  const [showAnswerNode, setShowAnswerNode] = useState(false);
+  const [displayNodes] = useState(false);
+  const [showAnswerNode] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowChat(true);
     }, 1500);
-
     return () => clearTimeout(timer);
   }, []);
-
-  const handleSendMessage = () => {
-    setDisplayNodes(true); // Switch to Nodes component
-    setShowAnswerNode(false); // Reset showAnswerNode in case of multiple transitions
-
-    // Start a timer to show AnswerNode after 3-4 seconds
-    setTimeout(() => {
-      setShowAnswerNode(true);
-    }, 3000); // Adjust to 4000 for a 4-second delay if needed
-  };
 
   return (
     <div className="w-full bg-navbar-bg flex items-center justify-center h-screen">
@@ -39,8 +28,9 @@ const Main = () => {
         transition={{ duration: 1.5, ease: "easeOut" }}
         className="relative flex items-center justify-center"
       >
-        <Image src={main} alt="" className="p-8 mt-10" />
+        <Image src={main} alt="Main Image" className="p-8 mt-10" />
 
+        {/* Chat Interface and Transitioned Components */}
         {showChat && (
           <motion.div
             initial={{ y: "100%", opacity: 0 }}
@@ -49,11 +39,18 @@ const Main = () => {
             className="absolute flex justify-center items-center"
           >
             {!displayNodes ? (
-              <ChatInterface onSubmit={handleSendMessage} />
+              <ChatInterface />
             ) : showAnswerNode ? (
-              <AnswerNode />
+              <AnswerNode
+                data={{ message: "Here’s your optimized shipping strategy." }}
+              />
             ) : (
-              <Nodes />
+              <Nodes
+                data={{
+                  message:
+                    "I'm constantly facing pressure to reduce shipping costs.",
+                }}
+              />
             )}
           </motion.div>
         )}

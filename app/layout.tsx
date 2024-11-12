@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { DM_Sans } from '@next/font/google';
+import { DM_Sans } from "@next/font/google";
+import { SidebarComponent } from "./components/Sidebar";
+import Navbar from "./components/Navbar";
 
 const dmSans = DM_Sans({
-  variable:"--font-dmsans",
-  weight: ['400', '500', '700'], 
-  subsets: ['latin'], 
+  variable: "--font-dmsans",
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -21,10 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${dmSans.variable} ${dmSans.variable} antialiased`}
-      >
-        {children}
+      <body className={`${dmSans.variable} ${dmSans.variable} antialiased`}>
+        <div className="flex flex-col">
+          <Navbar></Navbar>
+          <div className="flex items-center justify-center w-full h-screen">
+            <SidebarComponent></SidebarComponent>
+            {children}{" "}
+          </div>
+        </div>
       </body>
     </html>
   );
