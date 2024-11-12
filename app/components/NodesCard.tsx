@@ -34,9 +34,9 @@ export default function Nodes() {
         <div className="w-[600px] space-y-6">
           <div className="w-10/12 bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto">
             <p className="text-white text-justify">
-              I'm constantly facing pressure to reduce shipping costs while
+              I&apos;m constantly facing pressure to reduce shipping costs while
               maintaining service levels. Can you come up with a strategy for me
-              and summarize it? I'm using Shipoo platform.
+              and summarize it? I&apos;m using Shipoo platform.
             </p>
           </div>
 

@@ -4,12 +4,14 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import main from "../../public/main.png";
-import Nodes from "./NodesCard";
+import AnswerNode from "./AnswerNode";
 import ChatInterface from "./ChatInputCard";
+import Nodes from "./NodesCard";
 
 const Main = () => {
   const [showChat, setShowChat] = useState(false);
   const [displayNodes, setDisplayNodes] = useState(false);
+  const [showAnswerNode, setShowAnswerNode] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,6 +23,12 @@ const Main = () => {
 
   const handleSendMessage = () => {
     setDisplayNodes(true); // Switch to Nodes component
+    setShowAnswerNode(false); // Reset showAnswerNode in case of multiple transitions
+
+    // Start a timer to show AnswerNode after 3-4 seconds
+    setTimeout(() => {
+      setShowAnswerNode(true);
+    }, 3000); // Adjust to 4000 for a 4-second delay if needed
   };
 
   return (
@@ -40,10 +48,12 @@ const Main = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="absolute flex justify-center items-center"
           >
-            {displayNodes ? (
-              <Nodes />
-            ) : (
+            {!displayNodes ? (
               <ChatInterface onSubmit={handleSendMessage} />
+            ) : showAnswerNode ? (
+              <AnswerNode />
+            ) : (
+              <Nodes />
             )}
           </motion.div>
         )}
