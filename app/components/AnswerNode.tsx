@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export default function AnswerNode({ data }: { data: { message?: string } }) {
+interface AnswerNodeProps {
+  data: {
+    message?: string;
+    IsSelected?: boolean;
+  };
+}
+
+export default function AnswerNode({ data }: AnswerNodeProps) {
   console.log(data);
   return (
     <motion.div
@@ -17,9 +24,12 @@ export default function AnswerNode({ data }: { data: { message?: string } }) {
           "linear-gradient(469.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
       }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
+      className={cn(
+        "bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent",
+        data.IsSelected? "border-2 border-white" : "border-transparent"
+      )}
     >
-      <div className="flex flex-col items-center justify-between w-full gap-4">
+      <div className={cn("flex flex-col items-center justify-between w-full gap-4", data.IsSelected ? 'border-2 border-white' : "")}>
         <div className="flex items-center justify-center w-full">
           <div className="w-full flex items-center gap-4">
             <div className="rounded-full p-2 bg-node-icon-gradient">
@@ -32,11 +42,9 @@ export default function AnswerNode({ data }: { data: { message?: string } }) {
           </div>
         </div>
         <div className="w-[600px] space-y-6">
-          <div className="w-10/12 bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto">
+          <div className="w-10/12 bg-prompt-card-1 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] ml-auto">
             <p className="text-sm text-white text-justify">
-              I&apos;m constantly facing pressure to reduce shipping costs while
-              maintaining service levels. Can you come up with a strategy for me
-              and summarize it? I&apos;m using Shippo platform.
+              {data.message || "Default message for AnswerNode"}
             </p>
           </div>
 

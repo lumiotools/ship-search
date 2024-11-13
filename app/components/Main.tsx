@@ -39,7 +39,9 @@ const Main = () => {
             className="absolute flex justify-center items-center"
           >
             {!displayNodes ? (
-              <ChatInterface />
+              <ChatInterface
+                data={{ message: "Here’s your optimized shipping strategy." }}
+              />
             ) : showAnswerNode ? (
               <AnswerNode
                 data={{ message: "Here’s your optimized shipping strategy." }}

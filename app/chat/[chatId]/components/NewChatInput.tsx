@@ -7,9 +7,9 @@ import { MessageSquare, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import Nodes from "./NodesCard";
+import Nodes from "@/app/components/NodesCard";
 
-export default function ChatInterface({ data }: { data: { message: string } }) {
+export default function NewChatInput({ data }: { data: { message: string } }) {
   const router = useRouter();
   console.log(data);
   const [showNodes, setShowNodes] = useState(false);
@@ -27,7 +27,7 @@ export default function ChatInterface({ data }: { data: { message: string } }) {
     <>
       {showNodes ? (
         <Nodes
-          data={{ message: "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform." }}
+          data={{ message: "Please wait while we prepare your chat..." }}
         />
       ) : (
         <motion.div

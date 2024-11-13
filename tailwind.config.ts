@@ -26,6 +26,7 @@ const config: Config = {
       },
       boxShadow: {
         "custom-navbar": "0px 2px 4px 0px rgba(67, 67, 67, 0.25)",
+        "active-nodes":" 0px 2px 4px 0px rgba(67, 67, 67, 0.25)",
       },
       fontFamily: {
         dansans: ["var(--font-dm-sans)"],
@@ -39,6 +40,7 @@ const config: Config = {
 
         "answer-node-3": `linear-gradient(270deg, rgba(140, 66, 237, 0.54) 0%, rgba(202, 168, 247, 0.54) 100%)`,
         "answer-node-4": `linear-gradient(270deg, rgba(0, 127, 76, 0.4) 0%, rgba(107, 233, 182, 0.4) 100%)`,
+        "active-node-gradient":"linear-gradient(270deg, #3C49FF 0%, #969DFF 100%)",
 
 		'blue-gradient': `linear-gradient(0deg, #363636, #363636), linear-gradient(270deg, rgba(60, 73, 255, 0.54) 0%, rgba(150, 157, 255, 0.54) 100%)`,
         'light-blue-gradient': `linear-gradient(0deg, #363636, #363636), linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%)`,

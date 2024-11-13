@@ -28,7 +28,7 @@ export default function RootLayout({
           <Navbar></Navbar>
           <div className="flex items-center justify-center w-full h-screen bg-[#161716]">
             <SidebarComponent></SidebarComponent>
-            {children}{" "}
+            {children}
           </div>
         </div>
       </body>
