@@ -6,15 +6,10 @@ import { cn } from "@/lib/utils";
 
 const Nodes = ({ data }: { data: { message?: string } }) => (
   <motion.div
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
     className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
-    animate={{
-      borderImage:
-        "linear-gradient(469.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
-    }}
-    transition={{
-      loop: Infinity,
-      ease: "linear",
-    }}
   >
     <div className="flex flex-col items-center justify-between w-full gap-4">
       <div className="flex items-center justify-center w-full">
@@ -29,14 +24,24 @@ const Nodes = ({ data }: { data: { message?: string } }) => (
         </div>
       </div>
       <div className="w-[600px] space-y-6">
-        <div className="w-10/12 bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto">
+        <motion.div
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+          className="w-10/12 bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto"
+        >
           <p className="text-white text-justify">
             {data.message ||
-              "I'm constantly facing pressure to reduce shipping costs."}
+              "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform."}
           </p>
-        </div>
+        </motion.div>
 
-        <div className="relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
+          className="relative"
+        >
           <Input
             className={cn(
               "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
@@ -53,7 +58,7 @@ const Nodes = ({ data }: { data: { message?: string } }) => (
           >
             Submit
           </Button>
-        </div>
+        </motion.div>
       </div>
     </div>
   </motion.div>

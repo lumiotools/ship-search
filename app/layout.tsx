@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${dmSans.variable} ${dmSans.variable} antialiased`}>
         <div className="flex flex-col">
           <Navbar></Navbar>
-          <div className="flex items-center justify-center w-full h-screen">
+          <div className="flex items-center justify-center w-full h-screen bg-[#161716]">
             <SidebarComponent></SidebarComponent>
             {children}{" "}
           </div>
