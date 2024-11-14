@@ -32,13 +32,14 @@ const config: Config = {
         dansans: ["var(--font-dm-sans)"],
       },
       backgroundImage: {
+        
         "node-icon-gradient":
           "linear-gradient(270deg, #FF884D 0%, #D7875F 100%)",
         "answer-node-1":
           "linear-gradient(270deg, rgba(60, 73, 255, 0.54) 0%, rgba(150, 157, 255, 0.54) 100%);",
         "answer-node-2": `linear-gradient(270deg, rgba(140, 66, 237, 0.54) 0%, rgba(202, 168, 247, 0.54) 100%);`,
 
-        "answer-node-3": `linear-gradient(270deg, rgba(140, 66, 237, 0.54) 0%, rgba(202, 168, 247, 0.54) 100%)`,
+        "answer-node-3": `linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%);`,
         "answer-node-4": `linear-gradient(270deg, rgba(0, 127, 76, 0.4) 0%, rgba(107, 233, 182, 0.4) 100%)`,
         "active-node-gradient":"linear-gradient(270deg, #3C49FF 0%, #969DFF 100%)",
 
