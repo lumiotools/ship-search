@@ -41,7 +41,7 @@ export default function ChatInterface({ data }: { data: { message: string } }) {
             ease: "linear",
           }}
         >
-          <div className="w-[600px] space-y-3">
+          <div className="w-[230px] md:w-[600px] space-y-3">
             <div className="bg-prompt-card-1 rounded-2xl p-8 shadow-lg border border-[#2A2A2A]">
               <div className="flex flex-col items-center text-center space-y-3">
                 <div className="w-10 h-10 bg-prompt-card-icon rounded-2xl flex items-center justify-center">

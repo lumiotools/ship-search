@@ -4,6 +4,7 @@ import { HandCoins, Mic, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Handle, Position } from "@xyflow/react";
 
 interface AnswerNodeProps {
   data: {
@@ -26,10 +27,17 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
         "bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent",
-        data.IsSelected? "border-2 border-white" : "border-transparent"
+        data.IsSelected ? "border-2 border-white" : "border-transparent"
       )}
     >
-      <div className={cn("flex flex-col items-center justify-between w-full gap-4", data.IsSelected ? 'border-2 border-white' : "")}>
+      <Handle type="target" position={Position.Left} id="left" />
+      <Handle type="source" position={Position.Right} id="right" />
+      <div
+        className={cn(
+          "flex flex-col items-center justify-between w-full gap-4",
+          data.IsSelected ? "border-2 border-white" : ""
+        )}
+      >
         <div className="flex items-center justify-center w-full">
           <div className="w-full flex items-center gap-4">
             <div className="rounded-full p-2 bg-node-icon-gradient">

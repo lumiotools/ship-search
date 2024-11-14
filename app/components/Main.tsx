@@ -21,7 +21,7 @@ const Main = () => {
   }, []);
 
   return (
-    <div className="w-full bg-navbar-bg flex items-center justify-center h-screen">
+    <div className="w-full bg-navbar-bg flex items-center justify-center">
       <motion.div
         initial={{ scale: 0, rotate: 0 }}
         animate={{ scale: 1, rotate: 360 }}

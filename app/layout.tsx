@@ -24,11 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} ${dmSans.variable} antialiased`}>
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full ">
           <Navbar></Navbar>
-          <div className="flex items-center justify-center w-full h-screen bg-[#161716]">
-            <SidebarComponent></SidebarComponent>
-            {children}
+          <div className="flex flex-1 min-h-screen w-full">
+            <SidebarComponent />
+            <main className="flex flex-1 items-center justify-center bg-[#161716] h-screen w-full">{children}</main>
           </div>
         </div>
       </body>

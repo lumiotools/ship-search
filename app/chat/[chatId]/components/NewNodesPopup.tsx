@@ -8,7 +8,7 @@ interface NewNodesPopupProps {
 const NewNodesPopup: React.FC<NewNodesPopupProps> = ({ addNode }) => {
   return (
     <div className="bg-[#121212] flex flex-col items-center justify-center w-full px-5 py-2 shadow-active-nodes">
-      <h2 className="text-[#929292] text-base font-medium mb-3 text-center">
+      <h2 className="text-[#929292] text-base font-medium mb-3 text-center mt-2 md:mt-0">
         Active Nodes
       </h2>
       <div className="flex items-center gap-3 justify-between w-full">

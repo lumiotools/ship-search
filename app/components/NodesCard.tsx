@@ -23,7 +23,7 @@ const Nodes = ({ data }: { data: { message?: string } }) => (
           <Minimize2 className="text-slate-200 cursor-pointer"></Minimize2>
         </div>
       </div>
-      <div className="w-[600px] space-y-6">
+      <div className="w-[250px] md:w-[600px] space-y-6">
         <motion.div
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}

@@ -10,14 +10,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Handle, Position } from "@xyflow/react";
 
-const ActiveNode = ({ data }: { data: { message?: string } }) => (
+interface ActiveNodeProps {
+  data: {
+    message?: string;
+    IsSelected?: boolean;
+  };
+}
+
+const ActiveNode = ({ data }: ActiveNodeProps) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5, ease: "easeOut" }}
-    className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
+    className={cn(
+      "bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent",
+      data.IsSelected ? "border-2 border-white" : "border-transparent"
+    )}
   >
+    <Handle type="target" position={Position.Left} id="left" />
+    <Handle type="source" position={Position.Right} id="right" />
+
     <div className="flex flex-col items-center justify-between w-full gap-4">
       <div className="flex items-center justify-center w-full">
         <div className="w-full flex items-center gap-4">

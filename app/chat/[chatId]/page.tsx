@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import "@xyflow/react/dist/style.css";
 import Nodes from "@/app/components/NodesCard";
 import AnswerNode from "@/app/components/AnswerNode";
 import ActiveNode from "@/app/components/ActiveNode";
-
 import {
   Background,
   BackgroundVariant,
   Position,
   ReactFlow,
   useNodesState,
+  useEdgesState,
+  addEdge,
 } from "@xyflow/react";
 import { ZoomSlider } from "@/components/zoom-slider";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,17 @@ export default function ChatPage() {
     },
   ]);
 
+  // Initialize edges with an initial edge connecting node "1" to a new node "2"
+  const [edges, setEdges, onEdgesChange] = useEdgesState([
+    {
+      id: "e1-2", // Unique edge ID
+      source: "1", // Source node ID
+      target: "2", // Target node ID (you can create a node with ID "2" later)
+      animated: false,
+      style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+    },
+  ]);
+
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const getUniquePosition = () => {
@@ -63,7 +75,6 @@ export default function ChatPage() {
       )
     ) {
       x += 500;
-      
     }
 
     return { x, y };
@@ -82,6 +93,20 @@ export default function ChatPage() {
     };
 
     setNodes((prevNodes) => [...prevNodes, newNode]);
+
+    // Automatically add an edge connecting the new node to the initial node (ID "1")
+    setEdges((prevEdges) =>
+      addEdge(
+        {
+          id: `e${newNodeId}-1`,
+          source: "1",
+          target: newNodeId,
+          animated: false,
+          style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+        },
+        prevEdges
+      )
+    );
   };
 
   const onSelectionChange = ({ nodes }: { nodes: Array<{ id: string }> }) => {
@@ -92,9 +117,28 @@ export default function ChatPage() {
     }
   };
 
+  // Handles user-defined connections between nodes
+  const onConnect = useCallback(
+    (params: { source: string; target: string }) => {
+      const newEdgeId = `e${params.source}-${params.target}`; // Generate a unique ID for the edge
+      setEdges((prevEdges) =>
+        addEdge(
+          {
+            id: newEdgeId, // Add the id property
+            ...params,
+            animated: false,
+            style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+          },
+          prevEdges
+        )
+      );
+    },
+    []
+  );
+
   const updateNodeStyles = () => {
     return nodes.map((node) => {
-      if (node.type === "answerNode") {
+      if (node.type === "answerNode" || node.type === "activeNode") {
         return {
           ...node,
           style: {
@@ -117,7 +161,7 @@ export default function ChatPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="absolute top-16 left-0 w-full z-20"
+            className="absolute top-12 md:top-16 left-0 w-full z-20"
           >
             <NewNodesPopup addNode={addActiveNode} />
           </motion.div>
@@ -137,11 +181,14 @@ export default function ChatPage() {
       </div>
       <ReactFlow
         nodes={updateNodeStyles()}
+        edges={edges}
+        onConnect={onConnect}
         nodeTypes={nodeTypes}
         colorMode="dark"
         className="z-0"
         defaultViewport={defaultViewport}
         onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
         onSelectionChange={onSelectionChange}
       >
         <div className="absolute bottom-20 left-5 z-10">
