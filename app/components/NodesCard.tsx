@@ -28,11 +28,12 @@ const Nodes = ({ data }: { data: { message?: string } }) => (
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-          className="w-10/12 bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto"
+          className="max-w-[80%] w-fit bg-prompt-card-1 border-prompt-card-icon/20 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] flex items-end justify-stretch ml-auto"
         >
           <p className="text-white text-justify">
-            {data.message ||
-              "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform."}
+            {typeof data.message === "string"
+              ? data.message
+              : "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform."}
           </p>
         </motion.div>
 

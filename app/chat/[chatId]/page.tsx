@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "@xyflow/react/dist/style.css";
 import Nodes from "@/app/components/NodesCard";
 import AnswerNode from "@/app/components/AnswerNode";
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import ChatInterface from "@/app/components/ChatInputCard";
 import NewNodesPopup from "./components/NewNodesPopup";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 
 const nodeTypes = {
   answerNode: AnswerNode,
@@ -36,12 +37,95 @@ const nodeDefaults = {
 const defaultViewport = { x: 240, y: 170, zoom: 0.65 };
 
 export default function ChatPage() {
+  const [userInput, setUserInput] = useState<string>("");
+  const [apiResponse, setApiResponse] = useState<{
+    data: string;
+    UserSearch: string;
+  } | null>(null);
+  console.log("data", apiResponse);
+
+  const searchPara = useSearchParams();
+  console.log(searchPara);
+
+  console.log("user", userInput);
+
+  // useEffect(() => {
+  //   setUserInput(searchPara.get("message") || "");
+  //   handleSendMessage(searchPara.get("message") || "");
+  // }, [searchPara]);
+
+  useEffect(() => {
+    const initialUserInput = searchPara.get("message") || "";
+    setUserInput(initialUserInput);
+
+    // Set initial node with userInput immediately
+    setNodes([
+      {
+        id: "1",
+        type: "answerNode",
+        position: { x: 250, y: 5 },
+        data: {
+          userInput: initialUserInput,
+          message: "",
+        },
+        ...nodeDefaults,
+      },
+    ]);
+
+    // Trigger API call to get response
+    handleSendMessage(initialUserInput);
+  }, [searchPara]);
+
+  const handleSendMessage = async (userInput: string) => {
+    const userMessage = userInput;
+
+    try {
+      const response = await fetch(
+        "https://orchestro-ai-backend.onrender.com/api/v1/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chatHistory: [],
+            message: userMessage,
+            json: true,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const apiData = {
+        data: data.message,
+        UserSearch: userInput,
+        userInput,
+      };
+      setApiResponse(apiData);
+      setNodes([
+        {
+          id: "1",
+          type: "answerNode",
+          position: { x: 250, y: 5 },
+          data: {
+            userInput,
+            message: JSON.stringify(apiData),
+          },
+          ...nodeDefaults,
+        },
+      ]);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+
   const [nodes, setNodes, onNodesChange] = useNodesState([
     {
       id: "1",
       type: "answerNode",
       position: { x: 250, y: 5 },
       data: {
+        userInput,
         message:
           "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform.",
       },
@@ -88,7 +172,7 @@ export default function ChatPage() {
       id: newNodeId,
       type: "activeNode",
       position,
-      data: { message },
+      data: { userInput, message },
       ...nodeDefaults,
     };
 

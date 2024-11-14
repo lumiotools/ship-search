@@ -9,26 +9,50 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Nodes from "./NodesCard";
 
-export default function ChatInterface({ data }: { data: { message: string } }) {
+export default function ChatInterface() {
   const router = useRouter();
-  console.log(data);
   const [showNodes, setShowNodes] = useState(false);
+  const [userInput, setUserInput] = useState<string>("");
 
-  const handleSendMessage = () => {
+
+  const handleSendMessage = async () => {
     setShowNodes(true);
+
+    // const userMessage = userInput;
+
+    // try {
+    //   const response = await fetch("/api/chat", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       chatHistory: [],
+    //       message: userMessage,
+    //       json: true,
+    //     }),
+    //   });
+
+    //   const data = await response.json();
+    //   const apiData = {
+    //     data: data.message,
+    //     UserSearch: userInput,
+    //   };
+    //   setApiResponse(apiData);
+    // } catch (error) {
+    //   console.error("API Error:", error);
+    // }
 
     setTimeout(() => {
       const chatId = Date.now().toString();
-      router.push(`/chat/${chatId}`);
+      router.push(`/chat/${chatId}?message=${userInput}`);
     }, 3000);
   };
 
   return (
     <>
       {showNodes ? (
-        <Nodes
-          data={{ message: "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform." }}
-        />
+        <Nodes data={{ message: userInput }} />
       ) : (
         <motion.div
           className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
@@ -61,6 +85,8 @@ export default function ChatInterface({ data }: { data: { message: string } }) {
 
             <div className="relative">
               <Input
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
                 className={cn(
                   "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
                   "text-white placeholder:text-[#808080]"

@@ -30,7 +30,6 @@ const Main = () => {
       >
         <Image src={main} alt="Main Image" className="p-8 mt-10" />
 
-        {/* Chat Interface and Transitioned Components */}
         {showChat && (
           <motion.div
             initial={{ y: "100%", opacity: 0 }}
@@ -40,7 +39,6 @@ const Main = () => {
           >
             {!displayNodes ? (
               <ChatInterface
-                data={{ message: "Here’s your optimized shipping strategy." }}
               />
             ) : showAnswerNode ? (
               <AnswerNode

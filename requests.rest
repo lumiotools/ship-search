@@ -1,0 +1,10 @@
+POST https://orchestro-ai-backend.onrender.com/api/v1/chat
+Content-Type: application/json
+
+{
+    "chatHistory":[],
+    "message": "What are the best carriers in california",
+    "json": true
+}
+
+# What are the best carriers in california
