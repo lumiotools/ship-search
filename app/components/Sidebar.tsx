@@ -43,7 +43,6 @@ export function SidebarComponent() {
     setIsCollapsed(isChatPage);
   }, [isChatPage]);
 
-  // Handle window resize
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
@@ -52,7 +51,7 @@ export function SidebarComponent() {
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Call on initial load
+    handleResize(); 
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -62,10 +61,9 @@ export function SidebarComponent() {
       className={cn(
         "bg-black transition-all duration-300",
         isCollapsed ? "w-20" : "w-52",
-        "lg:block", // Always show on large screens
-        isMobileOpen ? "block" : "hidden", // Toggle on mobile
-        "fixed lg:relative", // Fixed on mobile, relative on desktop
-        "z-40" // Below navbar but above content
+        "lg:block", 
+        isMobileOpen ? "block" : "hidden", 
+        "lg:relative", 
       )}
     >
       <SidebarProvider>
