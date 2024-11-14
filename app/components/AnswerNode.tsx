@@ -36,6 +36,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
         return JSON.parse(data.message) as ApiResponse;
       }
     } catch (error) {
+      console.log(error)
       return {};
     }
   }, [data.message]);
