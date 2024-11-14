@@ -14,39 +14,13 @@ export default function ChatInterface() {
   const [showNodes, setShowNodes] = useState(false);
   const [userInput, setUserInput] = useState<string>("");
 
-
   const handleSendMessage = async () => {
     setShowNodes(true);
-
-    // const userMessage = userInput;
-
-    // try {
-    //   const response = await fetch("/api/chat", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       chatHistory: [],
-    //       message: userMessage,
-    //       json: true,
-    //     }),
-    //   });
-
-    //   const data = await response.json();
-    //   const apiData = {
-    //     data: data.message,
-    //     UserSearch: userInput,
-    //   };
-    //   setApiResponse(apiData);
-    // } catch (error) {
-    //   console.error("API Error:", error);
-    // }
 
     setTimeout(() => {
       const chatId = Date.now().toString();
       router.push(`/chat/${chatId}?message=${userInput}`);
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -55,14 +29,17 @@ export default function ChatInterface() {
         <Nodes data={{ message: userInput }} />
       ) : (
         <motion.div
-          className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
+          className="bg-prompt-card flex items-center justify-center p-5 rounded-xl"
           animate={{
+            borderRadius:"2px",
             borderImage:
-              "linear-gradient(469.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
+              "linear-gradient(490.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
+            borderWidth: "1px",
           }}
           transition={{
-            loop: Infinity,
-            ease: "linear",
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeOut"
           }}
         >
           <div className="w-[230px] md:w-[600px] space-y-3">

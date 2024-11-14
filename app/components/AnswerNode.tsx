@@ -1,10 +1,12 @@
 "use client";
+
 import { motion } from "framer-motion";
 import { HandCoins, Mic, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Handle, Position } from "@xyflow/react";
+import { useEffect, useState, useMemo } from "react";
 
 interface AnswerNodeProps {
   data: {
@@ -26,33 +28,53 @@ interface ApiResponse {
 }
 
 export default function AnswerNode({ data }: AnswerNodeProps) {
-  console.log("Line 18", data);
-  let api: ApiResponse = {};
-  try {
-    api = JSON.parse(data.message || "{}") as ApiResponse;
-  } catch (error) {
-    console.log(error);
-  }
+  const [isLoading, setIsLoading] = useState(true);
 
-  const carriers = api?.data?.carriers || [];
+  const api = useMemo(() => {
+    try {
+      if (data.message && typeof data.message === "string") {
+        return JSON.parse(data.message) as ApiResponse;
+      }
+    } catch (error) {
+      console.log(error)
+      return {};
+    }
+  }, [data.message]);
+
+  const carriers = useMemo(() => api?.data?.carriers || [], [api]);
+
+  useEffect(() => {
+    if (carriers.length > 0) {
+      setIsLoading(false);
+    }
+  }, [carriers]);
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
+      animate={{ opacity: 1, scale: 1 ,
         borderImage:
-          "linear-gradient(469.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
+          "linear-gradient(490.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
+        borderWidth: "2.2px",
       }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 2, ease: "easeOut"}}
       className={cn(
-        "bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent",
-        data.IsSelected ? "border-2 border-white" : "border-transparent"
+        "relative bg-prompt-card flex items-center justify-center p-5 rounded-xl",
+        isLoading
+          ? "animate-rotateBorder border-[3px] border-transparent"
+          : "border-none"
       )}
+      style={{
+        borderImageSource: isLoading
+          ? "linear-gradient(400.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%)"
+          : "none",
+        borderImageSlice: isLoading ? 1 : undefined,
+        borderWidth: isLoading ? "3px" : "none",
+      }}
     >
       <Handle type="target" position={Position.Left} id="left" />
       <Handle type="source" position={Position.Right} id="right" />
+
       <div
         className={cn(
           "flex flex-col items-center justify-between w-full gap-4",
@@ -77,21 +99,29 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             </p>
           </div>
 
-          <div className="w-full bg-[#232323] rounded-2xl p-5 shadow-lg">
-            <div className="grid grid-cols-2 gap-5 mt-4">
-              {carriers.map((carrier, index) => (
-                <div
-                  key={index}
-                  className={`flex flex-col p-3 gap-3 bg-answer-node-${
-                    (index % 4) + 1
-                  } text-white rounded-xl`}
-                >
-                  <h2 className="text-sm">{carrier.name}</h2>
-                  <p className="text-xs text-white/60">{carrier.about}</p>
-                </div>
-              ))}
+          {!isLoading && (
+            <div className="w-full bg-[#232323] rounded-2xl p-5 shadow-lg">
+              <div className="grid grid-cols-2 gap-5 mt-4">
+                {carriers.map((carrier, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col p-3 gap-3 text-white rounded-xl"
+                    style={{
+                      backgroundImage: [
+                        "linear-gradient(270deg, rgba(60, 73, 255, 0.54) 0%, rgba(150, 157, 255, 0.54) 100%)",
+                        "linear-gradient(270deg, rgba(140, 66, 237, 0.54) 0%, rgba(202, 168, 247, 0.54) 100%)",
+                        "linear-gradient(270deg, rgba(0, 127, 76, 0.4) 0%, rgba(107, 233, 182, 0.4) 100%)",
+                        "linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%)",
+                      ][index % 4],
+                    }}
+                  >
+                    <h2 className="text-sm">{carrier.name}</h2>
+                    <p className="text-xs text-white/60">{carrier.about}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="relative">
             <Input

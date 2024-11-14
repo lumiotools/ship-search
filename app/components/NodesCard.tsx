@@ -7,7 +7,14 @@ import { cn } from "@/lib/utils";
 const Nodes = ({ data }: { data: { message?: string } }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
+    animate={{
+      opacity: 1,
+      scale: 1,
+      borderRadius: "2px",
+      borderImage:
+        "linear-gradient(490.02deg, rgba(252, 178, 37, 0.79) -7.73%, rgba(72, 72, 72, 0) 36.72%) 1",
+      borderWidth: "1px",
+    }}
     transition={{ duration: 0.5, ease: "easeOut" }}
     className="bg-prompt-card flex items-center justify-center p-5 rounded-xl border-transparent"
   >

@@ -21,6 +21,12 @@ import NewNodesPopup from "./components/NewNodesPopup";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 
+// Define Carrier type
+interface Carrier {
+  name: string;
+  about: string;
+}
+
 const nodeTypes = {
   answerNode: AnswerNode,
   customNode: Nodes,
@@ -39,26 +45,18 @@ const defaultViewport = { x: 240, y: 170, zoom: 0.65 };
 export default function ChatPage() {
   const [userInput, setUserInput] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<{
-    data: string;
+    data: { carriers: Carrier[] };
     UserSearch: string;
   } | null>(null);
-  console.log("data", apiResponse);
 
   const searchPara = useSearchParams();
-  console.log(searchPara);
 
-  console.log("user", userInput);
-
-  // useEffect(() => {
-  //   setUserInput(searchPara.get("message") || "");
-  //   handleSendMessage(searchPara.get("message") || "");
-  // }, [searchPara]);
+  const [carriersData, setCarriersData] = useState<Carrier[]>([]);
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
     setUserInput(initialUserInput);
 
-    // Set initial node with userInput immediately
     setNodes([
       {
         id: "1",
@@ -72,7 +70,6 @@ export default function ChatPage() {
       },
     ]);
 
-    // Trigger API call to get response
     handleSendMessage(initialUserInput);
   }, [searchPara]);
 
@@ -102,6 +99,7 @@ export default function ChatPage() {
         userInput,
       };
       setApiResponse(apiData);
+
       setNodes([
         {
           id: "1",
@@ -119,6 +117,13 @@ export default function ChatPage() {
     }
   };
 
+  useEffect(() => {
+    // Directly use `carriers` if already an object
+    if (apiResponse?.data?.carriers) {
+      setCarriersData(apiResponse.data.carriers);
+    }
+  }, [apiResponse]);
+
   const [nodes, setNodes, onNodesChange] = useNodesState([
     {
       id: "1",
@@ -133,12 +138,11 @@ export default function ChatPage() {
     },
   ]);
 
-  // Initialize edges with an initial edge connecting node "1" to a new node "2"
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     {
-      id: "e1-2", // Unique edge ID
-      source: "1", // Source node ID
-      target: "2", // Target node ID (you can create a node with ID "2" later)
+      id: "e1-2",
+      source: "1",
+      target: "2",
       animated: false,
       style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
     },
@@ -178,7 +182,6 @@ export default function ChatPage() {
 
     setNodes((prevNodes) => [...prevNodes, newNode]);
 
-    // Automatically add an edge connecting the new node to the initial node (ID "1")
     setEdges((prevEdges) =>
       addEdge(
         {
@@ -194,21 +197,16 @@ export default function ChatPage() {
   };
 
   const onSelectionChange = ({ nodes }: { nodes: Array<{ id: string }> }) => {
-    if (nodes.length > 0) {
-      setSelectedNodeId(nodes[0].id);
-    } else {
-      setSelectedNodeId(null);
-    }
+    setSelectedNodeId(nodes.length > 0 ? nodes[0].id : null);
   };
 
-  // Handles user-defined connections between nodes
   const onConnect = useCallback(
     (params: { source: string; target: string }) => {
-      const newEdgeId = `e${params.source}-${params.target}`; // Generate a unique ID for the edge
+      const newEdgeId = `e${params.source}-${params.target}`;
       setEdges((prevEdges) =>
         addEdge(
           {
-            id: newEdgeId, // Add the id property
+            id: newEdgeId,
             ...params,
             animated: false,
             style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
@@ -221,24 +219,19 @@ export default function ChatPage() {
   );
 
   const updateNodeStyles = () => {
-    return nodes.map((node) => {
-      if (node.type === "answerNode" || node.type === "activeNode") {
-        return {
-          ...node,
-          style: {
-            border: node.id === selectedNodeId ? "2px solid white" : "none",
-            borderRadius: "8px",
-          },
-        };
-      }
-      return node;
-    });
+    return nodes.map((node) => ({
+      ...node,
+      style: {
+        border: node.id === selectedNodeId ? "2px solid white" : "none",
+        borderRadius: "8px",
+      },
+    }));
   };
 
   return (
     <div className="relative w-full h-screen bg-[#121212]">
       <AnimatePresence>
-        {selectedNodeId && (
+        {selectedNodeId && carriersData.length > 0 && (
           <motion.div
             key="popup"
             initial={{ opacity: 0, y: -20 }}
@@ -247,7 +240,7 @@ export default function ChatPage() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="absolute top-12 md:top-16 left-0 w-full z-20"
           >
-            <NewNodesPopup addNode={addActiveNode} />
+            <NewNodesPopup addNode={addActiveNode} carriers={carriersData} />
           </motion.div>
         )}
       </AnimatePresence>
