@@ -17,10 +17,10 @@ export default function ChatInterface() {
   const handleSendMessage = async () => {
     setShowNodes(true);
 
-    setTimeout(() => {
+    // setTimeout(() => {
       const chatId = Date.now().toString();
       router.push(`/chat/${chatId}?message=${userInput}`);
-    }, 2000);
+    // }, 2000);
   };
 
   return (

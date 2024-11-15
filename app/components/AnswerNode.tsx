@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HandCoins, Mic, Minimize2 } from "lucide-react";
+import { HandCoins, Loader, Mic, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -135,12 +135,15 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             />
             <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
             <Button
+            disabled={isLoading}
               className={cn(
                 "absolute right-2 top-1/2 -translate-y-1/2",
                 "bg-prompt-card-icon hover:bg-[#F5A623]/90 text-white rounded-lg px-6"
               )}
             >
-              Submit
+              {
+                isLoading ? <Loader className="animate-spin"/> :"Submit"
+              }
             </Button>
           </div>
         </div>
