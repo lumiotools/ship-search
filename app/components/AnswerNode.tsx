@@ -12,6 +12,7 @@ interface AnswerNodeProps {
   data: {
     userInput?: string;
     message?: string;
+    handleOpenCarrierNode: (carrier: Carrier) => void;
     IsSelected?: boolean;
   };
 }
@@ -114,6 +115,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
                         "linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%)",
                       ][index % 4],
                     }}
+                    onClick={() => data.handleOpenCarrierNode(carrier)}
                   >
                     <h2 className="text-sm">{carrier.name}</h2>
                     <p className="text-xs text-white/60">{carrier.about}</p>

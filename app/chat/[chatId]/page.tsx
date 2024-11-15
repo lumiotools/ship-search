@@ -65,6 +65,7 @@ export default function ChatPage() {
         data: {
           userInput: initialUserInput,
           message: "",
+          handleOpenCarrierNode: (carrier: Carrier) => {},
         },
         ...nodeDefaults,
       },
@@ -108,6 +109,7 @@ export default function ChatPage() {
           data: {
             userInput,
             message: JSON.stringify(apiData),
+            handleOpenCarrierNode,
           },
           ...nodeDefaults,
         },
@@ -124,6 +126,10 @@ export default function ChatPage() {
     }
   }, [apiResponse]);
 
+  const handleOpenCarrierNode = (carrier: Carrier) => {
+    addActiveNode(JSON.stringify(carrier));
+  };
+
   const [nodes, setNodes, onNodesChange] = useNodesState([
     {
       id: "1",
@@ -133,6 +139,7 @@ export default function ChatPage() {
         userInput,
         message:
           "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform.",
+        handleOpenCarrierNode: (carrier: Carrier) => {},
       },
       ...nodeDefaults,
     },
@@ -176,7 +183,11 @@ export default function ChatPage() {
       id: newNodeId,
       type: "activeNode",
       position,
-      data: { userInput, message },
+      data: {
+        userInput,
+        message,
+        handleOpenCarrierNode: (carrier: Carrier) => {},
+      },
       ...nodeDefaults,
     };
 
@@ -257,6 +268,7 @@ export default function ChatPage() {
         </Button>
       </div>
       <ReactFlow
+        preventScrolling={false}
         nodes={updateNodeStyles()}
         edges={edges}
         onConnect={onConnect}
