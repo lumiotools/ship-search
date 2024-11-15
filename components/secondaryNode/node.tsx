@@ -226,7 +226,7 @@ const SecondaryNode = ({ carrier }: { carrier: Carrier }) => {
                         </a>
                       </div>
                     )}
-                    {carrier.reviews && carrier.reviews[0] && (
+                    {carrier.reviews && carrier.reviews[1] && (
                       <div className="flex-1 flex items-start justify-between gap-2 flex-col bg-[#5243AA66] p-4 rounded-xl max-w-[180px]">
                         <div className="bg-[#6C59DA] p-2 rounded-full">
                           <SearchCheck />

@@ -54,7 +54,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
-    if(!initialUserInput) return;
+    if (!initialUserInput) return;
     setUserInput(initialUserInput);
 
     setNodes([
@@ -79,7 +79,7 @@ export default function ChatPage() {
 
   const handleSendMessage = async (userInput: string) => {
     const userMessage = userInput;
-    if(!userMessage) return;
+    if (!userMessage) return;
     try {
       const response = await fetch(
         "https://orchestro-ai-backend.onrender.com/api/v1/chat",
@@ -113,7 +113,7 @@ export default function ChatPage() {
             userInput,
             message: JSON.stringify(apiData),
             handleOpenCarrierNode: (carrier: Carrier) => {
-              console.log(carrier);
+              addActiveNode(JSON.stringify(carrier));
             },
             handleSendMessage,
           },
@@ -286,6 +286,7 @@ export default function ChatPage() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onSelectionChange={onSelectionChange}
+        preventScrolling={false}
       >
         <div className="absolute bottom-20 left-5 z-10">
           <ZoomSlider />
