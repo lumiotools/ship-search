@@ -25,9 +25,7 @@ export default function ChatInterface() {
 
   return (
     <>
-      {showNodes ? (
-        <Nodes data={{ message: userInput }} />
-      ) : (
+      {(
         <motion.div
           className="bg-prompt-card flex items-center justify-center p-5 rounded-xl"
           animate={{

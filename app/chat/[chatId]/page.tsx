@@ -79,6 +79,23 @@ export default function ChatPage() {
 
   const handleSendMessage = async (userInput: string) => {
     const userMessage = userInput;
+    setCarriersData([]);
+    setNodes([
+      {
+        id: "1",
+        type: "answerNode",
+        position: { x: 250, y: 5 },
+        data: {
+          userInput,
+          message:"",
+          handleOpenCarrierNode: (carrier: Carrier) => {
+            addActiveNode(JSON.stringify(carrier));
+          },
+          handleSendMessage,
+        },
+        ...nodeDefaults,
+      },
+    ]);
     if (!userMessage) return;
     try {
       const response = await fetch(

@@ -33,14 +33,6 @@ interface ApiResponse {
 export default function AnswerNode({ data }: AnswerNodeProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [input, setInput] = useState("");
-  const handleSubmit = async () => {
-    if (!input) return;
-    data.userInput = input;
-    setInput("");
-    setIsLoading(true);
-    await data.handleSendMessage(data.userInput);
-    setIsLoading(false);
-  };
   const api = useMemo(() => {
     try {
       if (data?.message && typeof data?.message === "string") {
@@ -51,8 +43,17 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
       return {};
     }
   }, [data.message]);
+  let carriers = useMemo(() => api?.data?.carriers || [], [api]);
 
-  const carriers = useMemo(() => api?.data?.carriers || [], [api]);
+  const handleSubmit = async () => {
+    if (!input) return;
+    data.userInput = input;
+    setInput("");
+    setIsLoading(true);
+    await data.handleSendMessage(data.userInput);
+    setIsLoading(false);
+  };
+
 
   useEffect(() => {
     if (carriers.length > 0) {
