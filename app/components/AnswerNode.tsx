@@ -43,7 +43,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
       return {};
     }
   }, [data.message]);
-  let carriers = useMemo(() => api?.data?.carriers || [], [api]);
+  const carriers = useMemo(() => api?.data?.carriers || [], [api]);
 
   const handleSubmit = async () => {
     if (!input) return;

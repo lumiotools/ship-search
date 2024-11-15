@@ -7,15 +7,14 @@ import { MessageSquare, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import Nodes from "./NodesCard";
 
 export default function ChatInterface() {
   const router = useRouter();
-  const [showNodes, setShowNodes] = useState(false);
+  // const [showNodes, setShowNodes] = useState(false);
   const [userInput, setUserInput] = useState<string>("");
 
   const handleSendMessage = async () => {
-    setShowNodes(true);
+    // setShowNodes(true);
 
     // setTimeout(() => {
       const chatId = Date.now().toString();
