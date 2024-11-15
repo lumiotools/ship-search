@@ -6,7 +6,6 @@ import {
   Package2,
   SearchCheck,
   Star,
-  StarHalf,
   Waypoints,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -90,7 +89,9 @@ const SecondaryNode = ({ carrier }: { carrier: Carrier }) => {
         { role: "user", content: userMessage },
         { role: "assistant", content: response.message },
       ]);
-    } catch (error) {}
+    } catch (error) {
+        console.log(error)
+    }
 
     setIsLoading(false);
   };

@@ -7,6 +7,7 @@ import main from "../../public/main.png";
 import AnswerNode from "./AnswerNode";
 import ChatInterface from "./ChatInputCard";
 import Nodes from "./NodesCard";
+import { Carrier } from "@/components/secondaryNode/node";
 
 const Main = () => {
   const [showChat, setShowChat] = useState(false);
@@ -38,11 +39,15 @@ const Main = () => {
             className="absolute flex justify-center items-center"
           >
             {!displayNodes ? (
-              <ChatInterface
-              />
+              <ChatInterface />
             ) : showAnswerNode ? (
               <AnswerNode
-                data={{ message: "Here’s your optimized shipping strategy." }}
+                data={{
+                  message: "Here’s your optimized shipping strategy.",
+                  handleOpenCarrierNode: (carrier: Carrier) => {
+                    console.log(carrier);
+                  },
+                }}
               />
             ) : (
               <Nodes

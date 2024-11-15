@@ -65,7 +65,9 @@ export default function ChatPage() {
         data: {
           userInput: initialUserInput,
           message: "",
-          handleOpenCarrierNode: (carrier: Carrier) => {},
+          handleOpenCarrierNode: (carrier: Carrier) => {
+            console.log(carrier);
+          },
         },
         ...nodeDefaults,
       },
@@ -139,7 +141,9 @@ export default function ChatPage() {
         userInput,
         message:
           "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform.",
-        handleOpenCarrierNode: (carrier: Carrier) => {},
+        handleOpenCarrierNode: (carrier: Carrier) => {
+          console.log(carrier);
+        },
       },
       ...nodeDefaults,
     },
@@ -186,7 +190,9 @@ export default function ChatPage() {
       data: {
         userInput,
         message,
-        handleOpenCarrierNode: (carrier: Carrier) => {},
+        handleOpenCarrierNode: (carrier: Carrier) => {
+          console.log(carrier);
+        },
       },
       ...nodeDefaults,
     };
