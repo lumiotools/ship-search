@@ -13,6 +13,7 @@ interface AnswerNodeProps {
     userInput?: string;
     message?: string;
     IsSelected?: boolean;
+    handleSendMessage: (userInput: string) => Promise<void>
   };
 }
 
@@ -29,10 +30,18 @@ interface ApiResponse {
 
 export default function AnswerNode({ data }: AnswerNodeProps) {
   const [isLoading, setIsLoading] = useState(true);
-
+  const [input,setInput]=useState("");
+  const handleSubmit=async() => {
+    if(!input) return;
+    data.userInput=input;
+    setInput("");
+    setIsLoading(true);
+     await data.handleSendMessage(data.userInput);
+      setIsLoading(false);
+  }
   const api = useMemo(() => {
     try {
-      if (data.message && typeof data.message === "string") {
+      if (data?.message && typeof data?.message === "string") {
         return JSON.parse(data.message) as ApiResponse;
       }
     } catch (error) {
@@ -46,6 +55,8 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
   useEffect(() => {
     if (carriers.length > 0) {
       setIsLoading(false);
+    }else{
+
     }
   }, [carriers]);
 
@@ -93,16 +104,16 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
           </div>
         </div>
         <div className="w-[600px] space-y-6">
-          <div className="w-10/12 bg-prompt-card-1 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] ml-auto">
+          {data.userInput && <div className="w-10/12 bg-prompt-card-1 rounded-2xl p-5 shadow-lg border border-[#2A2A2A] ml-auto">
             <p className="text-sm text-white text-justify">
-              {data.userInput || "No user input provided"}
+              {data.userInput}
             </p>
-          </div>
+          </div>}
 
-          {!isLoading && (
+          {!isLoading && carriers.length>0 && (
             <div className="w-full bg-[#232323] rounded-2xl p-5 shadow-lg">
               <div className="grid grid-cols-2 gap-5 mt-4">
-                {carriers.map((carrier, index) => (
+                { carriers.map((carrier, index) => (
                   <div
                     key={index}
                     className="flex flex-col p-3 gap-3 text-white rounded-xl"
@@ -125,7 +136,9 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
 
           <div className="relative">
             <Input
-              className={cn(
+            value={input}
+          onChange={(e)=>setInput(e.target.value)}
+            className={cn(
                 "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
                 "text-white placeholder:text-[#808080]"
               )}
@@ -133,6 +146,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             />
             <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
             <Button
+            onClick={handleSubmit}
             disabled={isLoading}
               className={cn(
                 "absolute right-2 top-1/2 -translate-y-1/2",

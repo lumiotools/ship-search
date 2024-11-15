@@ -48,13 +48,14 @@ export default function ChatPage() {
     data: { carriers: Carrier[] };
     UserSearch: string;
   } | null>(null);
-
+  const [loadingCarriers,setLoadingCarriers] = useState(false);
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
+    if(!initialUserInput) return;
     setUserInput(initialUserInput);
 
     setNodes([
@@ -65,6 +66,7 @@ export default function ChatPage() {
         data: {
           userInput: initialUserInput,
           message: "",
+          handleSendMessage,
         },
         ...nodeDefaults,
       },
@@ -75,7 +77,7 @@ export default function ChatPage() {
 
   const handleSendMessage = async (userInput: string) => {
     const userMessage = userInput;
-
+    if(!userMessage) return;
     try {
       const response = await fetch(
         "https://orchestro-ai-backend.onrender.com/api/v1/chat",
@@ -91,7 +93,7 @@ export default function ChatPage() {
           }),
         }
       );
-
+      setUserInput("");
       const data = await response.json();
       const apiData = {
         data: data.message,
@@ -108,6 +110,7 @@ export default function ChatPage() {
           data: {
             userInput,
             message: JSON.stringify(apiData),
+            handleSendMessage,
           },
           ...nodeDefaults,
         },
@@ -133,6 +136,7 @@ export default function ChatPage() {
         userInput,
         message:
           "I'm constantly facing pressure to reduce shipping costs while maintaining service levels. Can you come up with a strategy for me and summarize it? I'm using Shipoo platform.",
+        handleSendMessage,
       },
       ...nodeDefaults,
     },
