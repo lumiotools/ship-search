@@ -101,7 +101,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             <div className="rounded-full p-2 bg-node-icon-gradient">
               <HandCoins className="w-5 h-5 text-white" />
             </div>
-            <p className="text-white">Shipping Cost Optimizer</p>
+            <p className="text-white">Results</p>
           </div>
           <div>
             <Minimize2 className="text-slate-200 cursor-pointer"></Minimize2>
