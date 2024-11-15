@@ -17,10 +17,10 @@ export default function NewChatInput({ data }: { data: { message: string } }) {
   const handleSendMessage = () => {
     setShowNodes(true);
 
-    setTimeout(() => {
+    // setTimeout(() => {
       const chatId = Date.now().toString();
       router.push(`/chat/${chatId}`);
-    }, 3000);
+    // }, 3000);
   };
 
   return (
@@ -75,7 +75,7 @@ export default function NewChatInput({ data }: { data: { message: string } }) {
                   "bg-prompt-card-icon hover:bg-[#F5A623]/90 text-white rounded-lg px-6"
                 )}
               >
-                Submit
+              Submit
               </Button>
             </div>
           </div>
