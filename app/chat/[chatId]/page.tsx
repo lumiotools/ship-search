@@ -280,7 +280,7 @@ export default function ChatPage() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div
+      {/* <div
         className={`absolute top-28 left-5 z-10 ${
           selectedNodeId ? "top-40" : ""
         }`}
@@ -291,7 +291,7 @@ export default function ChatPage() {
         >
           + Add new node
         </Button>
-      </div>
+      </div> */}
       <ReactFlow
         nodes={updateNodeStyles()}
         edges={edges}
