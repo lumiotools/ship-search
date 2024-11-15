@@ -152,18 +152,18 @@ export default function ChatPage() {
 
   const getUniquePosition = () => {
     const initialNode = nodes[0];
-    let x = initialNode.position.x + 700;
+    const x = initialNode.position.x + 700;
     const y = initialNode.position.y;
 
-    while (
-      nodes.some(
-        (node) =>
-          Math.abs(node.position.x - x) < 150 &&
-          Math.abs(node.position.y - y) < 150
-      )
-    ) {
-      x += 500;
-    }
+    // while (
+    //   nodes.some(
+    //     (node) =>
+    //       Math.abs(node.position.x - x) < 150 &&
+    //       Math.abs(node.position.y - y) < 150
+    //   )
+    // ) {
+    //   x += 500;
+    // }
 
     return { x, y };
   };
@@ -180,7 +180,7 @@ export default function ChatPage() {
       ...nodeDefaults,
     };
 
-    setNodes((prevNodes) => [...prevNodes, newNode]);
+    setNodes((prevNodes) => [prevNodes[0], newNode]);
 
     setEdges((prevEdges) =>
       addEdge(

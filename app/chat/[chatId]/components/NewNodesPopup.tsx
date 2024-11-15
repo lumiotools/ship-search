@@ -23,7 +23,7 @@ const NewNodesPopup: React.FC<NewNodesPopupProps> = ({ addNode, carriers }) => {
           <Button
             key={carrier.name}
             className="bg-[#232323] border-[#4B4B4B] hover:bg-[#232323] px-4 rounded-full text-xs"
-            onClick={() => addNode(carrier.name)}
+            onClick={() => addNode(JSON.stringify(carrier))}
           >
             {carrier.name}
           </Button>
