@@ -48,7 +48,6 @@ export default function ChatPage() {
     data: { carriers: Carrier[] };
     UserSearch: string;
   } | null>(null);
-  const [loadingCarriers,setLoadingCarriers] = useState(false);
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
