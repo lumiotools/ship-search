@@ -1,91 +1,113 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Loader, Mic, Minimize2, Package2, SearchCheck, Star, Waypoints } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { Handle, Position } from "@xyflow/react"
-import SecondaryNodeUserMessageCard from "./userMessageCard"
-import { useEffect, useRef, useState } from "react"
-import SecondaryNodeAssistantMessageCard from "./assistantMessageCard"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { motion } from "framer-motion";
+import {
+  Building,
+  Globe,
+  Link,
+  Loader,
+  Mic,
+  Minimize2,
+  Package2,
+  Ship,
+  Star,
+  Stars,
+  Trophy,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { Handle, Position } from "@xyflow/react";
+import SecondaryNodeUserMessageCard from "./userMessageCard";
+import { useEffect, useRef, useState } from "react";
+import SecondaryNodeAssistantMessageCard from "./assistantMessageCard";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CarrierReview {
-  name: string
-  rating: number
-  review: string
-  url: string
+  name: string;
+  rating: number;
+  review: string;
+  url: string;
 }
 
-interface Carrier {
-  name?: string
-  about?: string
-  services?: string[]
-  achievements?: string[]
-  reviews?: CarrierReview[]
-  headquarter?: string
-  type?: string
-  url?: string
+export interface Carrier {
+  name?: string;
+  about?: string;
+  services?: string[];
+  achievements?: string[];
+  reviews?: CarrierReview[];
+  headquarter?: string;
+  type?: string;
+  url?: string;
 }
 
 interface ChatMessage {
-  role: string
-  content: string
+  role: string;
+  content: string;
 }
 
-export default function CarrierChatInterface({ carrier }: { carrier: Carrier }) {
+export default function CarrierChatInterface({
+  carrier,
+}: {
+  carrier: Carrier;
+}) {
   console.log("Carrier", carrier);
-  const inputRef = useRef<HTMLInputElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async () => {
     try {
-      const userMessage = inputRef.current?.value || ""
+      const userMessage = inputRef.current?.value || "";
 
-      setIsLoading(true)
-      setChatHistory([...chatHistory, { role: "user", content: userMessage }])
+      setIsLoading(true);
+      setChatHistory([...chatHistory, { role: "user", content: userMessage }]);
 
-      inputRef.current!.value = ""
+      inputRef.current!.value = "";
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/carrier`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          carrierName: carrier.name,
-          chatHistory: [
-            { role: "user", content: `Tell me about ${carrier.name}` },
-            { role: "assistant", content: JSON.stringify(carrier) },
-            ...chatHistory,
-          ],
-          message: userMessage,
-        }),
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/carrier`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            carrierName: carrier.name,
+            chatHistory: [
+              { role: "user", content: `Tell me about ${carrier.name}` },
+              { role: "assistant", content: JSON.stringify(carrier) },
+              ...chatHistory,
+            ],
+            message: userMessage,
+          }),
+        }
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message)
+        throw new Error(data.message);
       }
 
       setChatHistory([
         ...chatHistory,
         { role: "user", content: userMessage },
         { role: "assistant", content: data.message },
-      ])
+      ]);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    scrollRef.current?.children[1].scrollTo(0, scrollRef.current?.children[1].scrollHeight)
-  }, [chatHistory])
+    scrollRef.current?.children[1].scrollTo(
+      0,
+      scrollRef.current?.children[1].scrollHeight
+    );
+  }, [chatHistory]);
 
   return (
     <motion.div
@@ -135,72 +157,114 @@ export default function CarrierChatInterface({ carrier }: { carrier: Carrier }) 
                   transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
                   className="w-full bg-prompt-card-1 rounded-2xl p-5 shadow-lg border mr-auto space-y-4"
                 >
-                  <div className="flex gap-x-4">
-                    <span className="bg-[#6C59DA] text-white p-2 rounded-full">
-                      {carrier.headquarter}
-                    </span>
-                    <span className="bg-[#00CF8A] text-white p-2 rounded-full">
-                      {carrier.type}
-                    </span>
-                  </div>
-                  <p className="max-w-xl text-white"> {carrier.about} </p>
-                  <div className="w-[100%] flex items-start justify-betwee gap-2 flex-col bg-[#FF991F33] p-4 rounded-xl">
-                    <div className="flex justify-center items-center gap-3">
-                      {/* <div className="bg-[#FF991F] p-2 rounded-full">
-                        <SearchCheck />
-                      </div> */}
-                      <h2 className="text-xl text-white font-semibold mb-4 flex items-center gap-2">
-                        <span className="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-lg">
-                          🌐
-                        </span>
-                        services
-                      </h2>
+                  <div className="flex gap-x-4 font-semibold">
+                    <div className="bg-[#FF991F33] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
+                      <Building className="size-5" /> {carrier.headquarter}
                     </div>
-                    <ul className="flex gap-x-3 md:gap-x-5 text-slate-400 text-xs whitespace-normal">
+                    <div className="bg-[#00875A66] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
+                      <Ship className="size-5" /> {carrier.type}
+                    </div>
+                    <div className="bg-[#5243AA66] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
+                      <Link className="size-5" />{" "}
+                      <a href={carrier.url} target="_blank">
+                        Visit Website
+                      </a>
+                    </div>
+                  </div>
+                  <p className="text-white text-lg"> {carrier.about} </p>
+                  <div className="w-full flex items-start gap-2 flex-col bg-[#8800ff31] p-4 rounded-xl">
+                    <div className="flex justify-center items-center gap-3">
+                      <div className="text-xl text-white font-semibold mb-4 flex items-center gap-2">
+                        <Globe className="bg-[#b969ff31] p-1 size-8 rounded-full" />
+                        <h2>Services</h2>
+                      </div>
+                    </div>
+                    <ul className="w-full grid grid-cols-2 gap-3 text-white text-sm font-semibold whitespace-normal">
                       {carrier.services &&
                         carrier.services.map((item: string, index: number) => (
                           <li
                             key={index}
-                            className="text-slate-400 flex items-center gap-x-2 text-xs whitespace-normal"
+                            className="bg-[#b969ff31] rounded-lg px-4 py-3"
                           >
-                            <div className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                              {index + 1}
-                            </div>
-                            <p>{item}</p>
+                            {index + 1}. {item}
                           </li>
                         ))}
                     </ul>
-                    {/* <a
-                      className="text-slate-400 text-xs whitespace-normal underline"
-                      href={carrier.url}
-                      target="_blank"
-                    >
-                      Visit Website
-                    </a> */}
                   </div>
-                  <div className="bg-gray-800 rounded-2xl p-6 mb-6 text-white">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                      <span className="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-lg">
-                        🏆
-                      </span>
-                      Key Achievements
-                    </h2>
-                    <ul className="space-y-4">
-                      {carrier.achievements.map((achievement, index) => (
-                        <li
-                          key={index}
-                          className="bg-gray-700 rounded-lg p-4 flex items-center gap-3"
-                        >
-                          <div className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                            {index + 1}
-                          </div>
-                          <p>{achievement}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {carrier.achievements && (
+                    <div className="bg-gray-800 rounded-2xl p-4 mb-6 text-white">
+                      <div className="text-xl text-white font-semibold mb-4 flex items-center gap-2">
+                        <Trophy className="bg-gray-700 p-1.5 size-8 rounded-full" />
+                        <h2>Key Achievements</h2>
+                      </div>
+                      <ul className="grid grid-cols-1 gap-3 text-white text-sm font-semibold whitespace-normal">
+                        {carrier.services &&
+                          carrier.achievements.map(
+                            (achievement: string, index: number) => (
+                              <li
+                                key={index}
+                                className="bg-gray-700 rounded-lg px-4 py-3"
+                              >
+                                {index + 1}. {achievement}
+                              </li>
+                            )
+                          )}
+                      </ul>
+                    </div>
+                  )}
                   <div className="flex gap-5 w-full">
-                    {carrier.reviews && carrier.reviews[0] && (
+                    {carrier.reviews &&
+                      carrier.reviews.map((review, index) => (
+                        <div
+                          key={index}
+                          className={`flex-1 flex items-start justify-between gap-2 flex-col ${
+                            [
+                              "bg-[#FF991F33]",
+                              "bg-[#00875A66]",
+                              "bg-[#5243AA66]",
+                            ][index % 3]
+                          } p-4 rounded-xl max-w-[180px]`}
+                        >
+                          <div
+                            className={`p-2 rounded-full ${
+                              ["bg-[#FF991F]", "bg-[#00CF8A]", "bg-[#6C59DA]"][
+                                index % 3
+                              ]
+                            }`}
+                          >
+                            <Stars />
+                          </div>
+                          <p className="text-white text-sm mt-1 font-semibold">
+                            {review.name}
+                          </p>
+                          <div className="text-white text-sm flex gap-1">
+                            {Array(5)
+                              .fill(0)
+                              .map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={cn(
+                                    "size-3",
+                                    i < (review.rating ?? 0)
+                                      ? "text-amber-400 fill-amber-400"
+                                      : "text-amber-400"
+                                  )}
+                                />
+                              ))}
+                          </div>
+                          <p className="text-slate-400 text-xs whitespace-normal line-clamp-4">
+                            {review.review}
+                          </p>
+                          <a
+                            className="text-slate-400 text-xs whitespace-normal underline"
+                            href={review.url}
+                            target="_blank"
+                          >
+                            Read More
+                          </a>
+                        </div>
+                      ))}
+                    {/* {carrier.reviews && carrier.reviews[0] && (
                       <div className="flex-1  flex items-start justify-between gap-2 flex-col bg-[#00875A66] p-4 rounded-xl max-w-[180px]">
                         <div className="bg-[#00CF8A] p-2 rounded-full">
                           <Waypoints />
@@ -269,7 +333,7 @@ export default function CarrierChatInterface({ carrier }: { carrier: Carrier }) 
                           Read More
                         </a>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </motion.div>
               </div>
