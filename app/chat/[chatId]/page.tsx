@@ -48,13 +48,14 @@ export default function ChatPage() {
     data: { carriers: Carrier[] };
     UserSearch: string;
   } | null>(null);
-
+  const [loadingCarriers,setLoadingCarriers] = useState(false);
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
+    if(!initialUserInput) return;
     setUserInput(initialUserInput);
 
     setNodes([
@@ -68,6 +69,7 @@ export default function ChatPage() {
           handleOpenCarrierNode: (carrier: Carrier) => {
             console.log(carrier);
           },
+          handleSendMessage,
         },
         ...nodeDefaults,
       },
@@ -78,7 +80,7 @@ export default function ChatPage() {
 
   const handleSendMessage = async (userInput: string) => {
     const userMessage = userInput;
-
+    if(!userMessage) return;
     try {
       const response = await fetch(
         "https://orchestro-ai-backend.onrender.com/api/v1/chat",
@@ -94,7 +96,7 @@ export default function ChatPage() {
           }),
         }
       );
-
+      setUserInput("");
       const data = await response.json();
       const apiData = {
         data: data.message,
@@ -111,7 +113,10 @@ export default function ChatPage() {
           data: {
             userInput,
             message: JSON.stringify(apiData),
-            handleOpenCarrierNode,
+            handleOpenCarrierNode: (carrier: Carrier) => {
+              console.log(carrier);
+            },
+            handleSendMessage,
           },
           ...nodeDefaults,
         },
@@ -128,10 +133,6 @@ export default function ChatPage() {
     }
   }, [apiResponse]);
 
-  const handleOpenCarrierNode = (carrier: Carrier) => {
-    addActiveNode(JSON.stringify(carrier));
-  };
-
   const [nodes, setNodes, onNodesChange] = useNodesState([
     {
       id: "1",
@@ -144,6 +145,7 @@ export default function ChatPage() {
         handleOpenCarrierNode: (carrier: Carrier) => {
           console.log(carrier);
         },
+        handleSendMessage,
       },
       ...nodeDefaults,
     },
@@ -193,6 +195,7 @@ export default function ChatPage() {
         handleOpenCarrierNode: (carrier: Carrier) => {
           console.log(carrier);
         },
+        handleSendMessage,
       },
       ...nodeDefaults,
     };
@@ -274,7 +277,6 @@ export default function ChatPage() {
         </Button>
       </div>
       <ReactFlow
-        preventScrolling={false}
         nodes={updateNodeStyles()}
         edges={edges}
         onConnect={onConnect}

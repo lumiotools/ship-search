@@ -47,6 +47,9 @@ const Main = () => {
                   handleOpenCarrierNode: (carrier: Carrier) => {
                     console.log(carrier);
                   },
+                  handleSendMessage: async (userInput: string) => {
+                    console.log(userInput);
+                  },
                 }}
               />
             ) : (
