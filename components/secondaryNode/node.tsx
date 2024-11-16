@@ -61,7 +61,7 @@ export default function CarrierChatInterface({
   const handleSend = async () => {
     try {
       const userMessage = inputRef.current?.value || "";
-
+      if(!userMessage) return;
       setIsLoading(true);
       setChatHistory([...chatHistory, { role: "user", content: userMessage }]);
 
