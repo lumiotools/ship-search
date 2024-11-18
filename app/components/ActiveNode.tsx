@@ -4,14 +4,15 @@ interface ActiveNodeProps {
   data: {
     message?: string;
     IsSelected?: boolean;
+    handleShippingCostAddNode: (carrier: Carrier) => void;
+    handleCloseNode: (nodeId: string) => void;
   };
 }
 
 const ActiveNode = ({ data }: ActiveNodeProps) => {
   let carrierData: Carrier = {};
-  // @ts-ignore
-  const {handleCalCostAddNode} =data;
-  console.log("data ..",data)
+  const { handleShippingCostAddNode, handleCloseNode } = data;
+  console.log("data ..", data);
   try {
     carrierData = JSON.parse(data.message || "");
   } catch (error) {
@@ -19,7 +20,14 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
     carrierData = {};
   }
 
-  return <SecondaryNode key={carrierData.name} carrier={carrierData} handleCalCostAddNode={handleCalCostAddNode}/>;
+  return (
+    <SecondaryNode
+      key={carrierData.name}
+      carrier={carrierData}
+      handleShippingCostAddNode={handleShippingCostAddNode}
+      handleCloseNode={handleCloseNode}
+    />
+  );
 };
 
 export default ActiveNode;

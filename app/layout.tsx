@@ -4,6 +4,7 @@ import "./globals.css";
 import { DM_Sans } from "@next/font/google";
 import { SidebarComponent } from "./components/Sidebar";
 import Navbar from "./components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const dmSans = DM_Sans({
   variable: "--font-dmsans",
@@ -28,9 +29,12 @@ export default function RootLayout({
           <Navbar></Navbar>
           <div className="flex min-h-screen w-full">
             <SidebarComponent />
-            <main className="flex flex-1 items-center justify-center bg-[#161716] h-screen ">{children}</main>
+            <main className="flex flex-1 items-center justify-center bg-[#161716] h-screen ">
+              {children}
+            </main>
           </div>
         </div>
+        <Toaster />
       </body>
     </html>
   );

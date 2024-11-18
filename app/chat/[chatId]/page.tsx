@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import "@xyflow/react/dist/style.css";
-import Nodes from "@/app/components/NodesCard";
 import AnswerNode from "@/app/components/AnswerNode";
 import ActiveNode from "@/app/components/ActiveNode";
 import {
@@ -16,11 +15,10 @@ import {
 } from "@xyflow/react";
 import { ZoomSlider } from "@/components/zoom-slider";
 // import { Button } from "@/components/ui/button";
-import ChatInterface from "@/app/components/ChatInputCard";
 import NewNodesPopup from "./components/NewNodesPopup";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
-import CalCost from "@/components/rating-cost/CalCost";
+import ShippingCostNode from "@/components/shipping-cost/node";
 
 // Define Carrier type
 interface Carrier {
@@ -31,7 +29,7 @@ interface Carrier {
 const nodeTypes = {
   answerNode: AnswerNode,
   activeNode: ActiveNode,
-  calCostNode:CalCost
+  shippingCostNode: ShippingCostNode,
 };
 
 const nodeDefaults = {
@@ -59,7 +57,7 @@ export default function ChatPage() {
 
     setNodes([
       {
-        id: "1",
+        id: "result",
         type: "answerNode",
         position: { x: 250, y: 5 },
         data: {
@@ -69,6 +67,7 @@ export default function ChatPage() {
             console.log(carrier);
           },
           handleSendMessage,
+          handleCloseNode,
         },
         ...nodeDefaults,
       },
@@ -82,16 +81,17 @@ export default function ChatPage() {
     setCarriersData([]);
     setNodes([
       {
-        id: "1",
+        id: "result",
         type: "answerNode",
         position: { x: 250, y: 5 },
         data: {
           userInput,
-          message:"",
+          message: "",
           handleOpenCarrierNode: (carrier: Carrier) => {
             addActiveNode(JSON.stringify(carrier));
           },
           handleSendMessage,
+          handleCloseNode,
         },
         ...nodeDefaults,
       },
@@ -99,7 +99,7 @@ export default function ChatPage() {
     if (!userMessage) return;
     try {
       const response = await fetch(
-        "https://orchestro-ai-backend.onrender.com/api/v1/chat",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat`,
         {
           method: "POST",
           headers: {
@@ -123,7 +123,7 @@ export default function ChatPage() {
 
       setNodes([
         {
-          id: "1",
+          id: "result",
           type: "answerNode",
           position: { x: 250, y: 5 },
           data: {
@@ -133,6 +133,7 @@ export default function ChatPage() {
               addActiveNode(JSON.stringify(carrier));
             },
             handleSendMessage,
+            handleCloseNode,
           },
           ...nodeDefaults,
         },
@@ -141,9 +142,49 @@ export default function ChatPage() {
       console.error("API Error:", error);
     }
   };
-  const handleCalCostAddNode=() => {
-      alert("hello")
-  }
+
+  const handleCloseNode = (nodeId: string) => {
+    setNodes((prevNodes) => prevNodes.filter((node) => node.id !== nodeId));
+    setEdges((prevEdges) =>
+      prevEdges.filter(
+        (edge) => edge.source !== nodeId && edge.target !== nodeId
+      )
+    );
+  };
+
+  const handleShippingCostAddNode = (carrier: Carrier) => {
+    setNodes((prevNodes) => [
+      ...prevNodes,
+      {
+        id: "rate",
+        type: "shippingCostNode",
+        position: { x: 1900, y: 5 },
+        data: {
+          userInput,
+          message: JSON.stringify(carrier),
+          handleOpenCarrierNode: (carrier: Carrier) => {
+            console.log(carrier);
+          },
+          handleSendMessage,
+          handleCloseNode,
+        },
+        ...nodeDefaults,
+      },
+    ]);
+
+    setEdges((prevEdges) =>
+      addEdge(
+        {
+          id: `e3-2`,
+          source: "carrier",
+          target: "rate",
+          animated: false,
+          style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+        },
+        prevEdges
+      )
+    );
+  };
 
   useEffect(() => {
     // Directly use `carriers` if already an object
@@ -154,7 +195,7 @@ export default function ChatPage() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState([
     {
-      id: "1",
+      id: "result",
       type: "answerNode",
       position: { x: 250, y: 5 },
       data: {
@@ -165,6 +206,7 @@ export default function ChatPage() {
           console.log(carrier);
         },
         handleSendMessage,
+        handleCloseNode,
       },
       ...nodeDefaults,
     },
@@ -173,8 +215,8 @@ export default function ChatPage() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     {
       id: "e1-2",
-      source: "1",
-      target: "2",
+      source: "result",
+      target: "carrier",
       animated: false,
       style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
     },
@@ -186,25 +228,37 @@ export default function ChatPage() {
     const initialNode = nodes[0];
     const x = initialNode.position.x + 700;
     const y = initialNode.position.y;
+
+    // while (
+    //   nodes.some(
+    //     (node) =>
+    //       Math.abs(node.position.x - x) < 150 &&
+    //       Math.abs(node.position.y - y) < 150
+    //   )
+    // ) {
+    //   x += 500;
+    // }
+
     return { x, y };
   };
 
   const addActiveNode = (message: string) => {
-    const newNodeId = (nodes.length + 1).toString();
+    // const newNodeId = (nodes.length + 1).toString();
     const position = getUniquePosition();
 
     const newNode = {
-      id: newNodeId,
+      id: "carrier",
       type: "activeNode",
       position,
       data: {
         userInput,
         message,
-        handleCalCostAddNode,
+        handleShippingCostAddNode,
         handleOpenCarrierNode: (carrier: Carrier) => {
           console.log(carrier);
         },
         handleSendMessage,
+        handleCloseNode,
       },
       ...nodeDefaults,
     };
@@ -214,9 +268,9 @@ export default function ChatPage() {
     setEdges((prevEdges) =>
       addEdge(
         {
-          id: `e${newNodeId}-1`,
-          source: "1",
-          target: newNodeId,
+          id: `e${"carrier"}-1`,
+          source: "result",
+          target: "carrier",
           animated: false,
           style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
         },
@@ -224,7 +278,6 @@ export default function ChatPage() {
       )
     );
   };
-
 
   const onSelectionChange = ({ nodes }: { nodes: Array<{ id: string }> }) => {
     setSelectedNodeId(nodes.length > 0 ? nodes[0].id : null);
@@ -298,6 +351,7 @@ export default function ChatPage() {
         onEdgesChange={onEdgesChange}
         onSelectionChange={onSelectionChange}
         preventScrolling={false}
+        disableKeyboardA11y={true}
       >
         <div className="absolute bottom-20 left-5 z-10">
           <ZoomSlider />

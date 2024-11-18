@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HandCoins, Loader, Mic, Minimize2 } from "lucide-react";
+import { HandCoins, Loader, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -103,9 +103,9 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             </div>
             <p className="text-white">Results</p>
           </div>
-          <div>
+          {/* <div>
             <Minimize2 className="text-slate-200 cursor-pointer"></Minimize2>
-          </div>
+          </div> */}
         </div>
         <div className="w-[600px] space-y-6">
           {data.userInput && (

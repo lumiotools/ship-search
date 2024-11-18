@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import {
   Building,
+  DollarSign,
   Globe,
   Link,
   Loader,
@@ -39,6 +40,7 @@ export interface Carrier {
   headquarter?: string;
   type?: string;
   url?: string;
+  isRatesAvailable?: boolean;
 }
 
 interface ChatMessage {
@@ -48,11 +50,13 @@ interface ChatMessage {
 
 export default function CarrierChatInterface({
   carrier,
-  handleCalCostAddNode
+  handleShippingCostAddNode,
+  handleCloseNode,
 }: {
   carrier: Carrier;
+  handleShippingCostAddNode: (carrier: Carrier) => void;
+  handleCloseNode: (nodeId: string) => void;
 }) {
-  console.log("Carrier",  {handleCalCostAddNode, carrier});
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +66,7 @@ export default function CarrierChatInterface({
   const handleSend = async () => {
     try {
       const userMessage = inputRef.current?.value || "";
-      if(!userMessage) return;
+      if (!userMessage) return;
       setIsLoading(true);
       setChatHistory([...chatHistory, { role: "user", content: userMessage }]);
 
@@ -103,8 +107,8 @@ export default function CarrierChatInterface({
     setIsLoading(false);
   };
 
-
   useEffect(() => {
+    if (chatHistory.length === 0) return;
     scrollRef.current?.children[1].scrollTo(
       0,
       scrollRef.current?.children[1].scrollHeight
@@ -129,9 +133,13 @@ export default function CarrierChatInterface({
             </div>
             <p className="text-white font-semibold">{carrier.name}</p>
           </div>
-          <div>
-            <Minimize2 className="text-slate-200 cursor-pointer" />
-          </div>
+          <Button
+            variant="ghost"
+            onClick={() => handleCloseNode("carrier")}
+            className="size-12"
+          >
+            <Minimize2 className="text-slate-200 cursor-pointer !size-6" />
+          </Button>
         </div>
         <div className="space-y-6">
           <div className="w-[860px] h-[540px]">
@@ -172,6 +180,16 @@ export default function CarrierChatInterface({
                         Visit Website
                       </a>
                     </div>
+                    {carrier.isRatesAvailable && (
+                      <Button
+                        variant="ghost"
+                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        onClick={() => handleShippingCostAddNode(carrier)}
+                      >
+                        <DollarSign className="!size-5" />
+                        Find Rates
+                      </Button>
+                    )}
                   </div>
                   <p className="text-white text-lg"> {carrier.about} </p>
                   <div className="w-full flex items-start gap-2 flex-col bg-[#8800ff31] p-4 rounded-xl">
@@ -266,76 +284,6 @@ export default function CarrierChatInterface({
                           </a>
                         </div>
                       ))}
-                    {/* {carrier.reviews && carrier.reviews[0] && (
-                      <div className="flex-1  flex items-start justify-between gap-2 flex-col bg-[#00875A66] p-4 rounded-xl max-w-[180px]">
-                        <div className="bg-[#00CF8A] p-2 rounded-full">
-                          <Waypoints />
-                        </div>
-                        <p className="text-white text-sm mt-1 font-semibold">
-                          {carrier.reviews[0].name}
-                        </p>
-                        <div className="text-white text-sm flex gap-1">
-                          {Array(5)
-                            .fill(0)
-                            .map((_, i) => (
-                              <Star
-                                key={i}
-                                className={cn(
-                                  "size-3",
-                                  i < (carrier.reviews?.[0]?.rating ?? 0)
-                                    ? "text-amber-400 fill-amber-400"
-                                    : "text-amber-400"
-                                )}
-                              />
-                            ))}
-                        </div>
-                        <p className="text-slate-400 text-xs whitespace-normal line-clamp-4">
-                          {carrier.reviews[0].review}
-                        </p>
-                        <a
-                          className="text-slate-400 text-xs whitespace-normal underline"
-                          href={carrier.reviews[0].url}
-                          target="_blank"
-                        >
-                          Read More
-                        </a>
-                      </div>
-                    )}
-                    {carrier.reviews && carrier.reviews[1] && (
-                      <div className="flex-1 flex items-start justify-between gap-2 flex-col bg-[#5243AA66] p-4 rounded-xl max-w-[180px]">
-                        <div className="bg-[#6C59DA] p-2 rounded-full">
-                          <SearchCheck />
-                        </div>
-                        <p className="text-white text-sm mt-1 font-semibold">
-                          {carrier.reviews[1].name}
-                        </p>
-                        <div className="text-white text-sm flex gap-1">
-                          {Array(5)
-                            .fill(0)
-                            .map((_, i) => (
-                              <Star
-                                key={i}
-                                className={cn(
-                                  "size-3",
-                                  i < (carrier.reviews?.[1]?.rating ?? 0)
-                                    ? "text-amber-400 fill-amber-400"
-                                    : "text-amber-400"
-                                )}
-                              />
-                            ))}
-                        </div>
-                        <p className="text-slate-400 text-xs whitespace-normal line-clamp-4 mt-1">
-                          {carrier.reviews[1].review}
-                        </p>
-                        <a
-                          className="text-slate-400 text-xs whitespace-normal underline"
-                          href={carrier.reviews[1].url}
-                          target="_blank"
-                        >
-                          Read More
-                        </a>
-                      </div>
-                    )} */}
                   </div>
                 </motion.div>
               </div>
@@ -361,9 +309,6 @@ export default function CarrierChatInterface({
               {isLoading ? <Loader className="animate-spin" /> : "Submit"}
             </Button>
           </motion.div>
-          <div>
-            <button onClick={handleCalCostAddNode}>cal Cost</button>
-          </div>
         </div>
       </div>
     </motion.div>

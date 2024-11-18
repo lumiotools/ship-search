@@ -42,6 +42,7 @@ const config: Config = {
         "answer-node-3": `linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%);`,
         "answer-node-4": `linear-gradient(270deg, rgba(0, 127, 76, 0.4) 0%, rgba(107, 233, 182, 0.4) 100%)`,
         "active-node-gradient":"linear-gradient(270deg, #3C49FF 0%, #969DFF 100%)",
+        "rating-node-gradient":"linear-gradient(270deg, #c13cff 0%, #dd96ff 100%)",
 
 		'blue-gradient': `linear-gradient(0deg, #363636, #363636), linear-gradient(270deg, rgba(60, 73, 255, 0.54) 0%, rgba(150, 157, 255, 0.54) 100%)`,
         'light-blue-gradient': `linear-gradient(0deg, #363636, #363636), linear-gradient(270deg, rgba(14, 97, 161, 0.73) 0%, rgba(20, 130, 214, 0.73) 100%)`,
