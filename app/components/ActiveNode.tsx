@@ -9,7 +9,9 @@ interface ActiveNodeProps {
 
 const ActiveNode = ({ data }: ActiveNodeProps) => {
   let carrierData: Carrier = {};
-
+  // @ts-ignore
+  const {handleCalCostAddNode} =data;
+  console.log("data ..",data)
   try {
     carrierData = JSON.parse(data.message || "");
   } catch (error) {
@@ -17,7 +19,7 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
     carrierData = {};
   }
 
-  return <SecondaryNode key={carrierData.name} carrier={carrierData} />;
+  return <SecondaryNode key={carrierData.name} carrier={carrierData} handleCalCostAddNode={handleCalCostAddNode}/>;
 };
 
 export default ActiveNode;

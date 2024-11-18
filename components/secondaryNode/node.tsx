@@ -48,10 +48,11 @@ interface ChatMessage {
 
 export default function CarrierChatInterface({
   carrier,
+  handleCalCostAddNode
 }: {
   carrier: Carrier;
 }) {
-  console.log("Carrier", carrier);
+  console.log("Carrier",  {handleCalCostAddNode, carrier});
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -101,6 +102,7 @@ export default function CarrierChatInterface({
 
     setIsLoading(false);
   };
+
 
   useEffect(() => {
     scrollRef.current?.children[1].scrollTo(
@@ -359,6 +361,9 @@ export default function CarrierChatInterface({
               {isLoading ? <Loader className="animate-spin" /> : "Submit"}
             </Button>
           </motion.div>
+          <div>
+            <button onClick={handleCalCostAddNode}>cal Cost</button>
+          </div>
         </div>
       </div>
     </motion.div>

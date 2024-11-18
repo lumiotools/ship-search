@@ -20,6 +20,7 @@ import ChatInterface from "@/app/components/ChatInputCard";
 import NewNodesPopup from "./components/NewNodesPopup";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import CalCost from "@/components/rating-cost/CalCost";
 
 // Define Carrier type
 interface Carrier {
@@ -29,9 +30,8 @@ interface Carrier {
 
 const nodeTypes = {
   answerNode: AnswerNode,
-  customNode: Nodes,
-  searchNode: ChatInterface,
   activeNode: ActiveNode,
+  calCostNode:CalCost
 };
 
 const nodeDefaults = {
@@ -141,6 +141,9 @@ export default function ChatPage() {
       console.error("API Error:", error);
     }
   };
+  const handleCalCostAddNode=() => {
+      alert("hello")
+  }
 
   useEffect(() => {
     // Directly use `carriers` if already an object
@@ -183,17 +186,6 @@ export default function ChatPage() {
     const initialNode = nodes[0];
     const x = initialNode.position.x + 700;
     const y = initialNode.position.y;
-
-    // while (
-    //   nodes.some(
-    //     (node) =>
-    //       Math.abs(node.position.x - x) < 150 &&
-    //       Math.abs(node.position.y - y) < 150
-    //   )
-    // ) {
-    //   x += 500;
-    // }
-
     return { x, y };
   };
 
@@ -208,6 +200,7 @@ export default function ChatPage() {
       data: {
         userInput,
         message,
+        handleCalCostAddNode,
         handleOpenCarrierNode: (carrier: Carrier) => {
           console.log(carrier);
         },
@@ -231,6 +224,7 @@ export default function ChatPage() {
       )
     );
   };
+
 
   const onSelectionChange = ({ nodes }: { nodes: Array<{ id: string }> }) => {
     setSelectedNodeId(nodes.length > 0 ? nodes[0].id : null);
