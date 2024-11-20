@@ -5,7 +5,6 @@ import {
   Building,
   DollarSign,
   Globe,
-  Link,
   Loader,
   Mic,
   Minimize2,
@@ -62,6 +61,35 @@ export default function CarrierChatInterface({
 
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [webCapture, setWebCapture] = useState("loading");
+
+  const fetchWebCapture = async () => {
+    // const controller = new AbortController();
+    // const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 seconds timeout
+    try {
+      const response = await (
+        await fetch(
+          `${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}/api/web-capture?url=${carrier.url}`,
+          // { signal: controller.signal }
+        )
+      ).json();
+
+      // clearTimeout(timeoutId); // Clear timeout on success
+
+      if (response.success) {
+        setWebCapture(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.log(error)
+      setWebCapture("error");
+    }
+  };
+
+  useEffect(() => {
+    fetchWebCapture();
+  }, []);
 
   const handleSend = async () => {
     try {
@@ -174,12 +202,12 @@ export default function CarrierChatInterface({
                     <div className="bg-[#00875A66] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
                       <Ship className="size-5" /> {carrier.type}
                     </div>
-                    <div className="bg-[#5243AA66] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
+                    {/* <div className="bg-[#5243AA66] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
                       <Link className="size-5" />{" "}
                       <a href={carrier.url} target="_blank">
                         Visit Website
                       </a>
-                    </div>
+                    </div> */}
                     {carrier.isRatesAvailable && (
                       <Button
                         variant="ghost"
@@ -191,7 +219,32 @@ export default function CarrierChatInterface({
                       </Button>
                     )}
                   </div>
-                  <p className="text-white text-lg"> {carrier.about} </p>
+                  <p className="text-white text-xl font-semibold">
+                    {carrier.about}
+                  </p>
+                  <a href={carrier.url} target="_blank">
+                    <div className="w-full mx-auto my-4 aspect-video rounded-xl border overflow-hidden">
+                      {webCapture === "loading" ? (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Loader className="animate-spin text-primary" />
+                        </div>
+                      ) : webCapture === "error" ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center">
+                          <img
+                            src="/website-capture-error.svg"
+                            className="max-w-xs"
+                          />
+                          <p className="text-lg font-semibold text-white mt-8 mb-2">Unable to show the preview</p>
+                          <p className="underline text-white">Open Website</p>
+                        </div>
+                      ) : (
+                        <img
+                          className="size-full object-cover overflow-hidden"
+                          src={`${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}${webCapture}`}
+                        />
+                      )}
+                    </div>
+                  </a>
                   <div className="w-full flex items-start gap-2 flex-col bg-[#8800ff31] p-4 rounded-xl">
                     <div className="flex justify-center items-center gap-3">
                       <div className="text-xl text-white font-semibold mb-4 flex items-center gap-2">
