@@ -28,7 +28,7 @@ interface ChatMessage {
 
 export default function ApiDocChatNode({ data }: ActiveNodeProps) {
   let carrier: Carrier = {};
-  const { handleShippingCostAddNode, handleCloseNode } = data;
+  const { handleCloseNode } = data;
   console.log("data ..", data);
   try {
     carrier = JSON.parse(data.message || "");
