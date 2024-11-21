@@ -288,26 +288,26 @@ export default function ChatPage() {
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  const getUniquePosition = useCallback(
-    (prevNodes: typeof nodes) => {
-      const initialNode = prevNodes[prevNodes.length - 1];
-      let x = initialNode.position.x + 1000;
-      const y = initialNode.position.y;
+  // const getUniquePosition = useCallback(
+  //   (prevNodes: typeof nodes) => {
+  //     const initialNode = prevNodes[prevNodes.length - 1];
+  //     let x = initialNode.position.x + 1000;
+  //     const y = initialNode.position.y;
 
-      while (
-        prevNodes.some(
-          (node) =>
-            Math.abs(node.position.x - x) < 150 &&
-            Math.abs(node.position.y - y) < 150
-        )
-      ) {
-        x += 500;
-      }
+  //     while (
+  //       prevNodes.some(
+  //         (node) =>
+  //           Math.abs(node.position.x - x) < 150 &&
+  //           Math.abs(node.position.y - y) < 150
+  //       )
+  //     ) {
+  //       x += 500;
+  //     }
 
-      return { x, y };
-    },
-    [nodes]
-  );
+  //     return { x, y };
+  //   },
+  //   [nodes]
+  // );
 
   const addActiveNode = (message: string) => {
     // const newNodeId = (nodes.length + 1).toString();

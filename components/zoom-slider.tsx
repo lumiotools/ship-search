@@ -20,7 +20,7 @@ const ZoomSlider = React.forwardRef<
   Omit<PanelProps, "children">
 >(({ className, ...props }) => {
   const { zoom } = useViewport();
-  const { zoomTo, zoomIn, zoomOut, fitView } = useReactFlow();
+  const { zoomTo, zoomIn,  fitView } = useReactFlow();
 
   const { minZoom, maxZoom } = useStore(
     (state) => ({
