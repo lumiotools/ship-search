@@ -14,12 +14,13 @@ import {
   addEdge,
 } from "@xyflow/react";
 import { ZoomSlider } from "@/components/zoom-slider";
-// import { Button } from "@/components/ui/button";
-import NewNodesPopup from "./components/NewNodesPopup";
-import { motion, AnimatePresence } from "framer-motion";
+// // import { Button } from "@/components/ui/button";
+// import NewNodesPopup from "./components/NewNodesPopup";
+// import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import ShippingCostNode from "@/components/shipping-cost/node";
 import ApiDocChatNode from "@/components/api-doc-chat/node";
+import HandleReactFlowNodeFocus from "@/components/common/reactFlowNodeFocus";
 
 // Define Carrier type
 interface Carrier {
@@ -51,6 +52,7 @@ export default function ChatPage() {
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
+  console.log(carriersData)
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
@@ -155,24 +157,37 @@ export default function ChatPage() {
   };
 
   const handleShippingCostAddNode = (carrier: Carrier) => {
-    setNodes((prevNodes) => [
-      ...prevNodes,
-      {
-        id: "rate",
-        type: "shippingCostNode",
-        position: { x: 1900, y: 5 },
-        data: {
-          userInput,
-          message: JSON.stringify(carrier),
-          handleOpenCarrierNode: (carrier: Carrier) => {
-            console.log(carrier);
+    setNodes((prevNodes) => {
+      if (prevNodes.find((node) => node.id === "rate")) {
+        return [
+          ...prevNodes.filter((node) => node.id !== "rate" && node.id !== "apiDocChat"),
+          ...prevNodes.filter((node) => node.id === "rate"),
+        ];
+      } else {
+        return [
+          ...prevNodes.filter((node) => node.id !== "apiDocChat"),
+
+          {
+            id: "rate",
+            type: "shippingCostNode",
+            position: {
+              x: prevNodes[1].position.x + 1000,
+              y: prevNodes[1].position.y,
+            },
+            data: {
+              userInput,
+              message: JSON.stringify(carrier),
+              handleOpenCarrierNode: (carrier: Carrier) => {
+                console.log(carrier);
+              },
+              handleSendMessage,
+              handleCloseNode,
+            },
+            ...nodeDefaults,
           },
-          handleSendMessage,
-          handleCloseNode,
-        },
-        ...nodeDefaults,
-      },
-    ]);
+        ];
+      }
+    });
 
     setEdges((prevEdges) =>
       addEdge(
@@ -189,24 +204,37 @@ export default function ChatPage() {
   };
 
   const handleApiDocChatAddNode = (carrier: Carrier) => {
-    setNodes((prevNodes) => [
-      ...prevNodes,
-      {
-        id: "apiDocChat",
-        type: "ApiDocChatNode",
-        position: { x: 1900, y: 5 },
-        data: {
-          userInput,
-          message: JSON.stringify(carrier),
-          handleOpenCarrierNode: (carrier: Carrier) => {
-            console.log(carrier);
+    setNodes((prevNodes) => {
+      if (prevNodes.find((node) => node.id === "apiDocChat")) {
+        return [
+          ...prevNodes.filter((node) => node.id !== "rate" && node.id !== "apiDocChat"),
+          ...prevNodes.filter((node) => node.id === "apiDocChat"),
+        ];
+      } else {
+        return [
+          ...prevNodes.filter((node) => node.id !== "rate"),
+
+          {
+            id: "apiDocChat",
+            type: "ApiDocChatNode",
+            position: {
+              x: prevNodes[1].position.x + 1000,
+              y: prevNodes[1].position.y,
+            },
+            data: {
+              userInput,
+              message: JSON.stringify(carrier),
+              handleOpenCarrierNode: (carrier: Carrier) => {
+                console.log(carrier);
+              },
+              handleSendMessage,
+              handleCloseNode,
+            },
+            ...nodeDefaults,
           },
-          handleSendMessage,
-          handleCloseNode,
-        },
-        ...nodeDefaults,
-      },
-    ]);
+        ];
+      }
+    });
 
     setEdges((prevEdges) =>
       addEdge(
@@ -260,47 +288,53 @@ export default function ChatPage() {
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  const getUniquePosition = () => {
-    const initialNode = nodes[0];
-    const x = initialNode.position.x + 700;
-    const y = initialNode.position.y;
+  const getUniquePosition = useCallback(
+    (prevNodes: typeof nodes) => {
+      const initialNode = prevNodes[prevNodes.length - 1];
+      let x = initialNode.position.x + 1000;
+      const y = initialNode.position.y;
 
-    // while (
-    //   nodes.some(
-    //     (node) =>
-    //       Math.abs(node.position.x - x) < 150 &&
-    //       Math.abs(node.position.y - y) < 150
-    //   )
-    // ) {
-    //   x += 500;
-    // }
+      while (
+        prevNodes.some(
+          (node) =>
+            Math.abs(node.position.x - x) < 150 &&
+            Math.abs(node.position.y - y) < 150
+        )
+      ) {
+        x += 500;
+      }
 
-    return { x, y };
-  };
+      return { x, y };
+    },
+    [nodes]
+  );
 
   const addActiveNode = (message: string) => {
     // const newNodeId = (nodes.length + 1).toString();
-    const position = getUniquePosition();
 
-    const newNode = {
-      id: "carrier",
-      type: "activeNode",
-      position,
-      data: {
-        userInput,
-        message,
-        handleShippingCostAddNode,
-        handleApiDocChatAddNode,
-        handleOpenCarrierNode: (carrier: Carrier) => {
-          console.log(carrier);
+    setNodes((prevNodes) => [
+      prevNodes[0],
+      {
+        id: "carrier",
+        type: "activeNode",
+        position: {
+          x: prevNodes[0].position.x + 700,
+          y: prevNodes[0].position.y,
         },
-        handleSendMessage,
-        handleCloseNode,
+        data: {
+          userInput,
+          message,
+          handleShippingCostAddNode,
+          handleApiDocChatAddNode,
+          handleOpenCarrierNode: (carrier: Carrier) => {
+            console.log(carrier);
+          },
+          handleSendMessage,
+          handleCloseNode,
+        },
+        ...nodeDefaults,
       },
-      ...nodeDefaults,
-    };
-
-    setNodes((prevNodes) => [prevNodes[0], newNode]);
+    ]);
 
     setEdges((prevEdges) =>
       addEdge(
@@ -350,7 +384,7 @@ export default function ChatPage() {
 
   return (
     <div className="relative w-full h-screen bg-[#121212]">
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {selectedNodeId && carriersData.length > 0 && (
           <motion.div
             key="popup"
@@ -363,7 +397,7 @@ export default function ChatPage() {
             <NewNodesPopup addNode={addActiveNode} carriers={carriersData} />
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
       {/* <div
         className={`absolute top-28 left-5 z-10 ${
           selectedNodeId ? "top-40" : ""
@@ -393,6 +427,7 @@ export default function ChatPage() {
         <div className="absolute bottom-20 left-5 z-10">
           <ZoomSlider />
         </div>
+        <HandleReactFlowNodeFocus />
         <Background variant={BackgroundVariant.Dots} />
       </ReactFlow>
     </div>
