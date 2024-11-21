@@ -5,13 +5,18 @@ interface ActiveNodeProps {
     message?: string;
     IsSelected?: boolean;
     handleShippingCostAddNode: (carrier: Carrier) => void;
+    handleApiDocChatAddNode: (carrier: Carrier) => void;
     handleCloseNode: (nodeId: string) => void;
   };
 }
 
 const ActiveNode = ({ data }: ActiveNodeProps) => {
   let carrierData: Carrier = {};
-  const { handleShippingCostAddNode, handleCloseNode } = data;
+  const {
+    handleShippingCostAddNode,
+    handleApiDocChatAddNode,
+    handleCloseNode,
+  } = data;
   console.log("data ..", data);
   try {
     carrierData = JSON.parse(data.message || "");
@@ -25,6 +30,7 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
       key={carrierData.name}
       carrier={carrierData}
       handleShippingCostAddNode={handleShippingCostAddNode}
+      handleApiDocChatAddNode={handleApiDocChatAddNode}
       handleCloseNode={handleCloseNode}
     />
   );

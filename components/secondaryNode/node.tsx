@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
+  Book,
   Building,
   DollarSign,
   Globe,
@@ -22,6 +23,7 @@ import SecondaryNodeUserMessageCard from "./userMessageCard";
 import { useEffect, useRef, useState } from "react";
 import SecondaryNodeAssistantMessageCard from "./assistantMessageCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 
 interface CarrierReview {
   name: string;
@@ -40,6 +42,7 @@ export interface Carrier {
   type?: string;
   url?: string;
   isRatesAvailable?: boolean;
+  isApiDocsAvailable?: boolean;
 }
 
 interface ChatMessage {
@@ -50,10 +53,12 @@ interface ChatMessage {
 export default function CarrierChatInterface({
   carrier,
   handleShippingCostAddNode,
+  handleApiDocChatAddNode,
   handleCloseNode,
 }: {
   carrier: Carrier;
   handleShippingCostAddNode: (carrier: Carrier) => void;
+  handleApiDocChatAddNode: (carrier: Carrier) => void;
   handleCloseNode: (nodeId: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,13 +68,15 @@ export default function CarrierChatInterface({
   const [isLoading, setIsLoading] = useState(false);
   const [webCapture, setWebCapture] = useState("loading");
 
+  const { toast } = useToast();
+
   const fetchWebCapture = async () => {
     // const controller = new AbortController();
     // const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 seconds timeout
     try {
       const response = await (
         await fetch(
-          `${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}/api/web-capture?url=${carrier.url}`,
+          `${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}/api/web-capture?url=${carrier.url}`
           // { signal: controller.signal }
         )
       ).json();
@@ -82,7 +89,7 @@ export default function CarrierChatInterface({
         throw new Error(response.message);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setWebCapture("error");
     }
   };
@@ -120,7 +127,7 @@ export default function CarrierChatInterface({
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message);
+        throw new Error(data.error);
       }
 
       setChatHistory([
@@ -128,8 +135,11 @@ export default function CarrierChatInterface({
         { role: "user", content: userMessage },
         { role: "assistant", content: data.message },
       ]);
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      toast({
+        description: (error as Error).message,
+        variant: "destructive",
+      });
     }
 
     setIsLoading(false);
@@ -218,6 +228,16 @@ export default function CarrierChatInterface({
                         Find Rates
                       </Button>
                     )}
+                    {carrier.isApiDocsAvailable && (
+                      <Button
+                        variant="ghost"
+                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        onClick={() => handleApiDocChatAddNode(carrier)}
+                      >
+                        <Book className="!size-5" />
+                        Api Docs
+                      </Button>
+                    )}
                   </div>
                   <p className="text-white text-xl font-semibold">
                     {carrier.about}
@@ -234,7 +254,9 @@ export default function CarrierChatInterface({
                             src="/website-capture-error.svg"
                             className="max-w-xs"
                           />
-                          <p className="text-lg font-semibold text-white mt-8 mb-2">Unable to show the preview</p>
+                          <p className="text-lg font-semibold text-white mt-8 mb-2">
+                            Unable to show the preview
+                          </p>
                           <p className="underline text-white">Open Website</p>
                         </div>
                       ) : (

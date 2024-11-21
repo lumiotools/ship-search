@@ -19,6 +19,7 @@ import NewNodesPopup from "./components/NewNodesPopup";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import ShippingCostNode from "@/components/shipping-cost/node";
+import ApiDocChatNode from "@/components/api-doc-chat/node";
 
 // Define Carrier type
 interface Carrier {
@@ -30,6 +31,7 @@ const nodeTypes = {
   answerNode: AnswerNode,
   activeNode: ActiveNode,
   shippingCostNode: ShippingCostNode,
+  ApiDocChatNode: ApiDocChatNode,
 };
 
 const nodeDefaults = {
@@ -175,9 +177,43 @@ export default function ChatPage() {
     setEdges((prevEdges) =>
       addEdge(
         {
-          id: `e3-2`,
+          id: `e_rate-carrier`,
           source: "carrier",
           target: "rate",
+          animated: false,
+          style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+        },
+        prevEdges
+      )
+    );
+  };
+
+  const handleApiDocChatAddNode = (carrier: Carrier) => {
+    setNodes((prevNodes) => [
+      ...prevNodes,
+      {
+        id: "apiDocChat",
+        type: "ApiDocChatNode",
+        position: { x: 1900, y: 5 },
+        data: {
+          userInput,
+          message: JSON.stringify(carrier),
+          handleOpenCarrierNode: (carrier: Carrier) => {
+            console.log(carrier);
+          },
+          handleSendMessage,
+          handleCloseNode,
+        },
+        ...nodeDefaults,
+      },
+    ]);
+
+    setEdges((prevEdges) =>
+      addEdge(
+        {
+          id: `e_apiDocChat-carrier`,
+          source: "carrier",
+          target: "apiDocChat",
           animated: false,
           style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
         },
@@ -254,6 +290,7 @@ export default function ChatPage() {
         userInput,
         message,
         handleShippingCostAddNode,
+        handleApiDocChatAddNode,
         handleOpenCarrierNode: (carrier: Carrier) => {
           console.log(carrier);
         },
@@ -268,7 +305,7 @@ export default function ChatPage() {
     setEdges((prevEdges) =>
       addEdge(
         {
-          id: `e${"carrier"}-1`,
+          id: `e_carrier-result`,
           source: "result",
           target: "carrier",
           animated: false,
