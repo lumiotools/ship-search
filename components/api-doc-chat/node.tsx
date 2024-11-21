@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Loader, Mic, Minimize2, Package2 } from "lucide-react";
+import { Book, Loader, Mic, Minimize2, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Handle, Position } from "@xyflow/react";
@@ -130,25 +130,44 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
         </div>
         <div className="space-y-6">
           <div className="w-[860px] h-[540px]">
-            <ScrollArea className="size-full" ref={scrollRef}>
-              <div className="flex flex-col-reverse gap-6 px-6">
-                {[...chatHistory]
-                  .reverse()
-                  .map(({ role, content }, index) =>
-                    role === "user" ? (
-                      <ApiDocNodeUserMessageCard
-                        key={chatHistory.length - index}
-                        message={content}
-                      />
-                    ) : (
-                      <ApiDocNodeAssistantMessageCard
-                        key={chatHistory.length - index}
-                        message={content}
-                      />
-                    )
-                  )}
+            {chatHistory.length > 0 ? (
+              <ScrollArea className="size-full" ref={scrollRef}>
+                <div className="flex flex-col-reverse gap-6 px-6">
+                  {[...chatHistory]
+                    .reverse()
+                    .map(({ role, content }, index) =>
+                      role === "user" ? (
+                        <ApiDocNodeUserMessageCard
+                          key={chatHistory.length - index}
+                          message={content}
+                        />
+                      ) : (
+                        <ApiDocNodeAssistantMessageCard
+                          key={chatHistory.length - index}
+                          message={content}
+                        />
+                      )
+                    )}
+                </div>
+              </ScrollArea>
+            ) : (
+              <div className="size-full flex flex-col justify-center items-center text-center gap-4">
+                <div className="size-16 bg-prompt-card-icon rounded-2xl flex items-center justify-center">
+                  <Book className="size-10 text-white" />
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <h1 className="text-white text-2xl">
+                    <span className="text-prompt-card-icon">
+                      {carrier.name}
+                    </span>{" "}
+                    API Chat
+                  </h1>
+                  <p className="text-prompt-card-subeheading text-lg">
+                    Have a question about {carrier.name} API? Ask me!
+                  </p>
+                </div>
               </div>
-            </ScrollArea>
+            )}
           </div>
           <motion.div
             initial={{ opacity: 0 }}
