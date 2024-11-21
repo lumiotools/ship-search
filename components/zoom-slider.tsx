@@ -38,7 +38,7 @@ const ZoomSlider = React.forwardRef<
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => zoomOut({ duration: 300 })}
+        onClick={() => zoomTo(0, { duration: 300 })}
       >
         <Minus className="h-4 w-4" />
       </Button>
@@ -62,7 +62,7 @@ const ZoomSlider = React.forwardRef<
         variant="ghost"
         onClick={() => zoomTo(1, { duration: 300 })}
       >
-        {(100 * zoom).toFixed(0)}%
+        {(100 * zoom-50).toFixed(0)}%
       </Button>
       <Button
         variant="ghost"
