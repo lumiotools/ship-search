@@ -55,6 +55,12 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
     setIsLoading(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
 
   useEffect(() => {
     if (carriers.length > 0 || api?.data?.content) {
@@ -157,6 +163,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               className={cn(
                 "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
                 "text-white placeholder:text-[#808080]"

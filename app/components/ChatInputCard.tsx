@@ -22,6 +22,12 @@ export default function ChatInterface() {
     // }, 2000);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <>
       {(
@@ -61,6 +67,7 @@ export default function ChatInterface() {
               <Input
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className={cn(
                   "w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6",
                   "text-white placeholder:text-[#808080]"

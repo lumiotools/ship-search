@@ -23,6 +23,12 @@ export default function NewChatInput({ data }: { data: { message: string } }) {
     // }, 3000);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <>
       {showNodes ? (
@@ -66,6 +72,7 @@ export default function NewChatInput({ data }: { data: { message: string } }) {
                   "text-white placeholder:text-[#808080]"
                 )}
                 placeholder="Type here"
+                onKeyDown={handleKeyDown}
               />
               <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
               <Button
