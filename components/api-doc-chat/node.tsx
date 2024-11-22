@@ -71,17 +71,32 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
         }
       );
 
-      const data = await response.json();
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let done = false;
 
-      if (!data.success) {
-        throw new Error(data.error);
+      // Initialize the assistant message
+      const assistantMessage = { role: "assistant", content: "" };
+      setChatHistory((prev) => [...prev, assistantMessage]);
+
+      const assistantMessageIndex = chatHistory.length+1;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader!.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value, { stream: true });
+
+        // Update assistant message content progressively
+        assistantMessage.content += chunkValue;
+
+        // Update the state with the progressively updated message
+        setChatHistory((prev) => {
+          const newMessages = [...prev];
+          newMessages[assistantMessageIndex] = assistantMessage; // Update the specific message
+          return newMessages;
+        });
       }
 
-      setChatHistory([
-        ...chatHistory,
-        { role: "user", content: userMessage },
-        { role: "assistant", content: data.message },
-      ]);
     } catch (error: unknown) {
       toast({
         description: (error as Error).message,
