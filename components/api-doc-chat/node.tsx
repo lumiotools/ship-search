@@ -92,6 +92,12 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
     setIsLoading(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  };
+
   useEffect(() => {
     if (chatHistory.length === 0) return;
     scrollRef.current?.children[1].scrollTo(
@@ -178,6 +184,7 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
             <Input
               className="w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl pl-12 pr-24 py-6 text-white placeholder:text-[#808080]"
               placeholder="Type here"
+              onKeyDown={handleKeyDown}
               ref={inputRef}
             />
             <Mic className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#808080]" />
