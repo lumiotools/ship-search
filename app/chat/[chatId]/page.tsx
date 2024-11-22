@@ -46,7 +46,7 @@ const defaultViewport = { x: 240, y: 170, zoom: 0.65 };
 export default function ChatPage() {
   const [userInput, setUserInput] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<{
-    data: { carriers: Carrier[] };
+    data: { carriers: Carrier[],content?: string};
     UserSearch: string;
   } | null>(null);
   const searchPara = useSearchParams();

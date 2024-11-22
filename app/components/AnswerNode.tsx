@@ -27,6 +27,7 @@ interface Carrier {
 interface ApiResponse {
   data?: {
     carriers?: Carrier[];
+    content?:string;
   };
 }
 
@@ -56,7 +57,7 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
 
 
   useEffect(() => {
-    if (carriers.length > 0) {
+    if (carriers.length > 0 || api?.data?.content) {
       setIsLoading(false);
     } else {
     }
@@ -115,8 +116,19 @@ export default function AnswerNode({ data }: AnswerNodeProps) {
               </p>
             </div>
           )}
+          {
+            api?.data?.content &&  <div
+            className="w-10/12 flex flex-col p-3 gap-3 text-white rounded-xl"
+            style={{
+              backgroundImage: 
+                "linear-gradient(270deg, rgba(60, 73, 255, 0.54) 0%, rgba(150, 157, 255, 0.54) 100%)",
+            }}
+          >
+            <h2 className="text-sm text-white">{api.data.content}</h2>
+          </div>
+          }
 
-          {!isLoading && carriers.length > 0 && (
+          {!isLoading && !api?.data?.content && carriers.length > 0 && (
             <div className="w-full bg-[#232323] rounded-2xl p-5 shadow-lg">
               <div className="grid grid-cols-2 gap-5 mt-4">
                 {carriers.map((carrier, index) => (
