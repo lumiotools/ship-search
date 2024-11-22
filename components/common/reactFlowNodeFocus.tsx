@@ -11,7 +11,7 @@ const HandleReactFlowNodeFocus = () => {
     if (lastNode) {
       fitView({
         nodes: [lastNode],
-        padding: 0.5,
+        padding: 0.3,
         duration: 1000,
         maxZoom: 1,
       });

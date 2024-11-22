@@ -20,14 +20,14 @@ const ZoomSlider = React.forwardRef<
   Omit<PanelProps, "children">
 >(({ className, ...props }) => {
   const { zoom } = useViewport();
-  const { zoomTo, zoomIn,  fitView } = useReactFlow();
+  const { zoomTo, zoomIn, fitView } = useReactFlow();
 
   const { minZoom, maxZoom } = useStore(
     (state) => ({
       minZoom: state.minZoom,
       maxZoom: state.maxZoom,
     }),
-    (a, b) => a.minZoom !== b.minZoom || a.maxZoom !== b.maxZoom,
+    (a, b) => a.minZoom !== b.minZoom || a.maxZoom !== b.maxZoom
   );
 
   return (
@@ -62,12 +62,12 @@ const ZoomSlider = React.forwardRef<
         variant="ghost"
         onClick={() => zoomTo(1, { duration: 300 })}
       >
-        {(100 * zoom-50).toFixed(0)}%
+        {(100 * zoom - 50).toFixed(0)}%
       </Button>
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => fitView({ duration: 300 })}
+        onClick={() => fitView({ duration: 300, padding: 0.3 })}
       >
         <Maximize className="h-4 w-4" />
       </Button>
