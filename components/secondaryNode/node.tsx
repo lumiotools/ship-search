@@ -76,7 +76,7 @@ export default function CarrierChatInterface({
     try {
       const response = await (
         await fetch(
-          `${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}/api/web-capture?url=${carrier.url}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/website-screenshot?url=${carrier.url}`
           // { signal: controller.signal }
         )
       ).json();
@@ -84,7 +84,7 @@ export default function CarrierChatInterface({
       // clearTimeout(timeoutId); // Clear timeout on success
 
       if (response.success) {
-        setWebCapture(response.data);
+        setWebCapture(response.data.url);
       } else {
         throw new Error(response.message);
       }
@@ -283,7 +283,7 @@ export default function CarrierChatInterface({
                       ) : (
                         <img
                           className="size-full object-cover overflow-hidden"
-                          src={`${process.env.NEXT_PUBLIC_WEB_CAPTURE_URL}${webCapture}`}
+                          src={`${process.env.NEXT_PUBLIC_API_URL}${webCapture}`}
                         />
                       )}
                     </div>
