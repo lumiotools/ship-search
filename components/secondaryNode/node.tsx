@@ -168,13 +168,13 @@ export default function CarrierChatInterface({
       handleSend();
     }
   };
-
+  
   useEffect(() => {
     if (chatHistory.length === 0) return;
-    scrollRef.current?.children[1].scrollTo(
-      0,
-      scrollRef.current?.children[1].scrollHeight
-    );
+    scrollRef.current?.children[1].scrollTo({
+      top: scrollRef.current?.children[1].scrollHeight,
+      behavior: "smooth",
+    });
   }, [chatHistory]);
 
   return (
