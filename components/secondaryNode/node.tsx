@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
+  BadgeDollarSign,
   Book,
   Building,
   DollarSign,
@@ -241,20 +242,10 @@ export default function CarrierChatInterface({
                         Visit Website
                       </a>
                     </div> */}
-                    {carrier.isRatesAvailable && (
-                      <Button
-                        variant="ghost"
-                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
-                        onClick={() => handleShippingCostAddNode(carrier)}
-                      >
-                        <DollarSign className="!size-5" />
-                        Find Rates
-                      </Button>
-                    )}
                     {carrier.isApiDocsAvailable && (
                       <Button
                         variant="ghost"
-                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        className="!bg-[#4394aa66] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
                         onClick={() => handleApiDocChatAddNode(carrier)}
                       >
                         <Book className="!size-5" />
@@ -264,13 +255,23 @@ export default function CarrierChatInterface({
                     {carrier.isRatesNegotiationAvailable && (
                       <Button
                         variant="ghost"
-                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        className="!bg-[#9b43aa66] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
                         onClick={() =>
                           handleRatesNegotiationChatAddNode(carrier)
                         }
                       >
-                        <Book className="!size-5" />
+                        <BadgeDollarSign className="!size-5" />
                         Rates Negotiation
+                      </Button>
+                    )}
+                    {carrier.isRatesAvailable && (
+                      <Button
+                        variant="ghost"
+                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        onClick={() => handleShippingCostAddNode(carrier)}
+                      >
+                        <DollarSign className="!size-5" />
+                        Find Rates
                       </Button>
                     )}
                   </div>
