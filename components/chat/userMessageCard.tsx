@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-const ApiDocNodeUserMessageCard = ({ message }: { message: string }) => {
+const ChatUserMessageCard = ({ message }: { message: string }) => {
   return (
     <motion.div
       initial={{ x: 50, opacity: 0 }}
@@ -15,4 +15,4 @@ const ApiDocNodeUserMessageCard = ({ message }: { message: string }) => {
   );
 };
 
-export default ApiDocNodeUserMessageCard;
+export default ChatUserMessageCard;

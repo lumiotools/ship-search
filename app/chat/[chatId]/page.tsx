@@ -21,6 +21,7 @@ import { useSearchParams } from "next/navigation";
 import ShippingCostNode from "@/components/shipping-cost/node";
 import ApiDocChatNode from "@/components/api-doc-chat/node";
 import HandleReactFlowNodeFocus from "@/components/common/reactFlowNodeFocus";
+import RatesNegotiationChatNode from "@/components/rates-negotiation/node";
 
 // Define Carrier type
 interface Carrier {
@@ -33,6 +34,7 @@ const nodeTypes = {
   activeNode: ActiveNode,
   shippingCostNode: ShippingCostNode,
   ApiDocChatNode: ApiDocChatNode,
+  RatesNegotiationChatNode: RatesNegotiationChatNode,
 };
 
 const nodeDefaults = {
@@ -46,13 +48,13 @@ const defaultViewport = { x: 240, y: 170, zoom: 0.65 };
 export default function ChatPage() {
   const [userInput, setUserInput] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<{
-    data: { carriers: Carrier[],content?: string};
+    data: { carriers: Carrier[]; content?: string };
     UserSearch: string;
   } | null>(null);
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
-  console.log(carriersData)
+  console.log(carriersData);
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
@@ -160,12 +162,16 @@ export default function ChatPage() {
     setNodes((prevNodes) => {
       if (prevNodes.find((node) => node.id === "rate")) {
         return [
-          ...prevNodes.filter((node) => node.id !== "rate" && node.id !== "apiDocChat"),
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
           ...prevNodes.filter((node) => node.id === "rate"),
         ];
       } else {
         return [
-          ...prevNodes.filter((node) => node.id !== "apiDocChat"),
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
 
           {
             id: "rate",
@@ -207,12 +213,16 @@ export default function ChatPage() {
     setNodes((prevNodes) => {
       if (prevNodes.find((node) => node.id === "apiDocChat")) {
         return [
-          ...prevNodes.filter((node) => node.id !== "rate" && node.id !== "apiDocChat"),
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
           ...prevNodes.filter((node) => node.id === "apiDocChat"),
         ];
       } else {
         return [
-          ...prevNodes.filter((node) => node.id !== "rate"),
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
 
           {
             id: "apiDocChat",
@@ -242,6 +252,56 @@ export default function ChatPage() {
           id: `e_apiDocChat-carrier`,
           source: "carrier",
           target: "apiDocChat",
+          animated: false,
+          style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+        },
+        prevEdges
+      )
+    );
+  };
+
+  const handleRatesNegotiationChatAddNode = (carrier: Carrier) => {
+    setNodes((prevNodes) => {
+      if (prevNodes.find((node) => node.id === "ratesNegotiationChat")) {
+        return [
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
+          ...prevNodes.filter((node) => node.id === "ratesNegotiationChat"),
+        ];
+      } else {
+        return [
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
+          {
+            id: "ratesNegotiationChat",
+            type: "RatesNegotiationChatNode",
+            position: {
+              x: prevNodes[1].position.x + 1000,
+              y: prevNodes[1].position.y,
+            },
+            data: {
+              userInput,
+              message: JSON.stringify(carrier),
+              handleOpenCarrierNode: (carrier: Carrier) => {
+                console.log(carrier);
+              },
+              handleSendMessage,
+              handleCloseNode,
+            },
+            ...nodeDefaults,
+          },
+        ];
+      }
+    });
+
+    setEdges((prevEdges) =>
+      addEdge(
+        {
+          id: `e_ratesNegotiationChat-carrier`,
+          source: "carrier",
+          target: "ratesNegotiationChat",
           animated: false,
           style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
         },
@@ -326,6 +386,7 @@ export default function ChatPage() {
           message,
           handleShippingCostAddNode,
           handleApiDocChatAddNode,
+          handleRatesNegotiationChatAddNode,
           handleOpenCarrierNode: (carrier: Carrier) => {
             console.log(carrier);
           },

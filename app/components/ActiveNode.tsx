@@ -6,6 +6,7 @@ interface ActiveNodeProps {
     IsSelected?: boolean;
     handleShippingCostAddNode: (carrier: Carrier) => void;
     handleApiDocChatAddNode: (carrier: Carrier) => void;
+    handleRatesNegotiationChatAddNode: (carrier: Carrier) => void;
     handleCloseNode: (nodeId: string) => void;
   };
 }
@@ -15,6 +16,7 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
   const {
     handleShippingCostAddNode,
     handleApiDocChatAddNode,
+    handleRatesNegotiationChatAddNode,
     handleCloseNode,
   } = data;
   console.log("data ..", data);
@@ -31,6 +33,7 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
       carrier={carrierData}
       handleShippingCostAddNode={handleShippingCostAddNode}
       handleApiDocChatAddNode={handleApiDocChatAddNode}
+      handleRatesNegotiationChatAddNode={handleRatesNegotiationChatAddNode}
       handleCloseNode={handleCloseNode}
     />
   );

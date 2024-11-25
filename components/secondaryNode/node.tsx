@@ -19,11 +19,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Handle, Position } from "@xyflow/react";
-import SecondaryNodeUserMessageCard from "./userMessageCard";
 import { useEffect, useRef, useState } from "react";
-import SecondaryNodeAssistantMessageCard from "./assistantMessageCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import ChatUserMessageCard from "../chat/userMessageCard";
+import ChatAssistantMessageCard from "../chat/assistantMessageCard";
 
 interface CarrierReview {
   name: string;
@@ -43,6 +43,7 @@ export interface Carrier {
   url?: string;
   isRatesAvailable?: boolean;
   isApiDocsAvailable?: boolean;
+  isRatesNegotiationAvailable?: boolean;
 }
 
 interface ChatMessage {
@@ -54,11 +55,13 @@ export default function CarrierChatInterface({
   carrier,
   handleShippingCostAddNode,
   handleApiDocChatAddNode,
+  handleRatesNegotiationChatAddNode,
   handleCloseNode,
 }: {
   carrier: Carrier;
   handleShippingCostAddNode: (carrier: Carrier) => void;
   handleApiDocChatAddNode: (carrier: Carrier) => void;
+  handleRatesNegotiationChatAddNode: (carrier: Carrier) => void;
   handleCloseNode: (nodeId: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -132,7 +135,7 @@ export default function CarrierChatInterface({
       const assistantMessage = { role: "assistant", content: "" };
       setChatHistory((prev) => [...prev, assistantMessage]);
 
-      const assistantMessageIndex = chatHistory.length+1;
+      const assistantMessageIndex = chatHistory.length + 1;
 
       while (!done) {
         const { value, done: doneReading } = await reader!.read();
@@ -149,7 +152,6 @@ export default function CarrierChatInterface({
           return newMessages;
         });
       }
-
     } catch (error: unknown) {
       toast({
         description: (error as Error).message,
@@ -161,7 +163,7 @@ export default function CarrierChatInterface({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSend();
     }
   };
@@ -208,12 +210,12 @@ export default function CarrierChatInterface({
                   .reverse()
                   .map(({ role, content }, index) =>
                     role === "user" ? (
-                      <SecondaryNodeUserMessageCard
+                      <ChatUserMessageCard
                         key={chatHistory.length - index}
                         message={content}
                       />
                     ) : (
-                      <SecondaryNodeAssistantMessageCard
+                      <ChatAssistantMessageCard
                         key={chatHistory.length - index}
                         message={content}
                       />
@@ -226,7 +228,7 @@ export default function CarrierChatInterface({
                   transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
                   className="w-full bg-prompt-card-1 rounded-2xl p-5 shadow-lg border mr-auto space-y-4"
                 >
-                  <div className="flex gap-x-4 font-semibold">
+                  <div className="flex gap-4 font-semibold flex-wrap">
                     <div className="bg-[#FF991F33] text-white p-2 rounded-full flex gap-2 justify-center items-center px-3">
                       <Building className="size-5" /> {carrier.headquarter}
                     </div>
@@ -257,6 +259,18 @@ export default function CarrierChatInterface({
                       >
                         <Book className="!size-5" />
                         Api Docs
+                      </Button>
+                    )}
+                    {carrier.isRatesNegotiationAvailable && (
+                      <Button
+                        variant="ghost"
+                        className="!bg-[#aaa04366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        onClick={() =>
+                          handleRatesNegotiationChatAddNode(carrier)
+                        }
+                      >
+                        <Book className="!size-5" />
+                        Rates Negotiation
                       </Button>
                     )}
                   </div>

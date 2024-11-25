@@ -3,7 +3,7 @@ import React from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const SecondaryNodeAssistantMessageCard = ({
+const ChatAssistantMessageCard = ({
   message,
 }: {
   message: string;
@@ -32,4 +32,4 @@ const SecondaryNodeAssistantMessageCard = ({
   );
 };
 
-export default SecondaryNodeAssistantMessageCard;
+export default ChatAssistantMessageCard;

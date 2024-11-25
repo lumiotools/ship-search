@@ -26,7 +26,7 @@ interface ChatMessage {
   content: string;
 }
 
-export default function ApiDocChatNode({ data }: ActiveNodeProps) {
+export default function RatesNegotiationChatNode({ data }: ActiveNodeProps) {
   let carrier: Carrier = {};
   const { handleCloseNode } = data;
   console.log("data ..", data);
@@ -55,7 +55,7 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
       inputRef.current!.value = "";
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/api-docs`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/rates-negotiation`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -137,12 +137,12 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
               <Package2 className="w-5 h-5 text-white" />
             </div>
             <p className="text-white font-semibold">
-              {carrier.name} API Documentation Chat
+              {carrier.name} Rates Negotiation Chat
             </p>
           </div>
           <Button
             variant="ghost"
-            onClick={() => handleCloseNode("apiDocChat")}
+            onClick={() => handleCloseNode("ratesNegotiationChat")}
             className="size-12"
           >
             <Minimize2 className="text-slate-200 cursor-pointer !size-6" />
@@ -180,10 +180,11 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
                     <span className="text-prompt-card-icon">
                       {carrier.name}
                     </span>{" "}
-                    API Chat
+                    Rates Negotiation Chat
                   </h1>
                   <p className="text-prompt-card-subeheading text-lg">
-                    Have a question about {carrier.name} API? Ask me!
+                    Have a question about how to optimize rates for{" "}
+                    {carrier.name}? Ask me!
                   </p>
                 </div>
               </div>
