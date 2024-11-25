@@ -5,7 +5,7 @@ import { Book, Loader, Mic, Minimize2, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Handle, Position } from "@xyflow/react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Carrier } from "../secondaryNode/node";
 import { useToast } from "@/hooks/use-toast";
@@ -44,6 +44,7 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
 
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
 
   const handleSend = async () => {
     try {
@@ -112,13 +113,31 @@ export default function ApiDocChatNode({ data }: ActiveNodeProps) {
     }
   };
 
+  const handleScroll = (e: Event) => {
+    const target = e.target as HTMLDivElement;
+
+    setIsUserScrolling(
+      target.scrollTop + target.clientHeight + 50 < target.scrollHeight
+    );
+  };
+
   useEffect(() => {
     if (chatHistory.length === 0) return;
+    const scrollArea = scrollRef.current?.children[1];
+    scrollArea?.addEventListener("scroll", handleScroll);
+    return () => {
+      scrollArea?.removeEventListener("scroll", handleScroll);
+    };
+  }, [chatHistory]);
+
+  useEffect(() => {
+    if (chatHistory.length === 0) return;
+    if (isUserScrolling) return;
+
     scrollRef.current?.children[1].scrollTo({
       top: scrollRef.current?.children[1].scrollHeight,
-      behavior: "smooth",
     });
-  }, [chatHistory]);
+  }, [chatHistory, isUserScrolling]);
 
   return (
     <motion.div
