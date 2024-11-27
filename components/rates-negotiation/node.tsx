@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Book, Loader, Mic, Minimize2, Package2 } from "lucide-react";
+import { BadgeDollarSign, Book, Loader, Mic, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Handle, Position } from "@xyflow/react";
@@ -153,7 +153,7 @@ export default function RatesNegotiationChatNode({ data }: ActiveNodeProps) {
         <div className="flex items-center justify-center w-full">
           <div className="w-full flex items-center gap-4">
             <div className="rounded-full p-2 bg-active-node-gradient">
-              <Package2 className="w-5 h-5 text-white" />
+              <BadgeDollarSign className="w-5 h-5 text-white" />
             </div>
             <p className="text-white font-semibold">
               {carrier.name} Rates Negotiation Chat

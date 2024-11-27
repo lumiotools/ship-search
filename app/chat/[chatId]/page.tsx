@@ -22,6 +22,7 @@ import ShippingCostNode from "@/components/shipping-cost/node";
 import ApiDocChatNode from "@/components/api-doc-chat/node";
 import HandleReactFlowNodeFocus from "@/components/common/reactFlowNodeFocus";
 import RatesNegotiationChatNode from "@/components/rates-negotiation/node";
+import ContactFormNode from "@/components/contact-form/node";
 
 // Define Carrier type
 interface Carrier {
@@ -35,6 +36,7 @@ const nodeTypes = {
   shippingCostNode: ShippingCostNode,
   ApiDocChatNode: ApiDocChatNode,
   RatesNegotiationChatNode: RatesNegotiationChatNode,
+  ContactFormNode: ContactFormNode,
 };
 
 const nodeDefaults = {
@@ -310,6 +312,57 @@ export default function ChatPage() {
     );
   };
 
+  const handleContactFormAddNode = (carrier: Carrier) => {
+    setNodes((prevNodes) => {
+      if (prevNodes.find((node) => node.id === "contactForm")) {
+        return [
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
+          ...prevNodes.filter((node) => node.id === "contactForm"),
+        ];
+      } else {
+        return [
+          ...prevNodes.filter(
+            (node) => node.id === "result" || node.id === "carrier"
+          ),
+
+          {
+            id: "contactForm",
+            type: "ContactFormNode",
+            position: {
+              x: prevNodes[1].position.x + 1000,
+              y: prevNodes[1].position.y,
+            },
+            data: {
+              userInput,
+              message: JSON.stringify(carrier),
+              handleOpenCarrierNode: (carrier: Carrier) => {
+                console.log(carrier);
+              },
+              handleSendMessage,
+              handleCloseNode,
+            },
+            ...nodeDefaults,
+          },
+        ];
+      }
+    });
+
+    setEdges((prevEdges) =>
+      addEdge(
+        {
+          id: `e_contactForm-carrier`,
+          source: "carrier",
+          target: "contactForm",
+          animated: false,
+          style: { stroke: "#FCB22563", border: "1px solid #FCB22563" },
+        },
+        prevEdges
+      )
+    );
+  };
+
   useEffect(() => {
     // Directly use `carriers` if already an object
     if (apiResponse?.data?.carriers) {
@@ -387,6 +440,7 @@ export default function ChatPage() {
           handleShippingCostAddNode,
           handleApiDocChatAddNode,
           handleRatesNegotiationChatAddNode,
+          handleContactFormAddNode,
           handleOpenCarrierNode: (carrier: Carrier) => {
             console.log(carrier);
           },

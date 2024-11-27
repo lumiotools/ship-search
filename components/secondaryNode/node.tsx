@@ -8,9 +8,9 @@ import {
   DollarSign,
   Globe,
   Loader,
+  Mail,
   Mic,
   Minimize2,
-  Package2,
   Ship,
   Star,
   Stars,
@@ -45,6 +45,7 @@ export interface Carrier {
   isRatesAvailable?: boolean;
   isApiDocsAvailable?: boolean;
   isRatesNegotiationAvailable?: boolean;
+  isContactFromAvailable?: boolean;
 }
 
 interface ChatMessage {
@@ -57,12 +58,14 @@ export default function CarrierChatInterface({
   handleShippingCostAddNode,
   handleApiDocChatAddNode,
   handleRatesNegotiationChatAddNode,
+  handleContactFormAddNode,
   handleCloseNode,
 }: {
   carrier: Carrier;
   handleShippingCostAddNode: (carrier: Carrier) => void;
   handleApiDocChatAddNode: (carrier: Carrier) => void;
   handleRatesNegotiationChatAddNode: (carrier: Carrier) => void;
+  handleContactFormAddNode: (carrier: Carrier) => void;
   handleCloseNode: (nodeId: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -210,7 +213,7 @@ export default function CarrierChatInterface({
         <div className="flex items-center justify-center w-full">
           <div className="w-full flex items-center gap-4">
             <div className="rounded-full p-2 bg-active-node-gradient">
-              <Package2 className="w-5 h-5 text-white" />
+              <Ship className="w-5 h-5 text-white" />
             </div>
             <p className="text-white font-semibold">{carrier.name}</p>
           </div>
@@ -291,6 +294,16 @@ export default function CarrierChatInterface({
                       >
                         <DollarSign className="!size-5" />
                         Find Rates
+                      </Button>
+                    )}
+                    {carrier.isContactFromAvailable && (
+                      <Button
+                        variant="ghost"
+                        className="!bg-[#aa434366] text-white p-2 font-semibold text-base rounded-full flex gap-2 h-11 justify-center items-center px-3"
+                        onClick={() => handleContactFormAddNode(carrier)}
+                      >
+                        <Mail className="!size-5" />
+                        Contact
                       </Button>
                     )}
                   </div>

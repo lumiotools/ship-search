@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Minimize2, Ship } from "lucide-react";
+import { DollarSign, Minimize2 } from "lucide-react";
 import { Handle, Position } from "@xyflow/react";
 import { useState } from "react";
 import { Carrier } from "../secondaryNode/node";
@@ -156,7 +156,7 @@ function ShippingCostNode({ data }: ActiveNodeProps) {
         <div className="flex items-center justify-center w-full">
           <div className="w-full flex items-center gap-4">
             <div className="rounded-full p-2 bg-rating-node-gradient">
-              <Ship className="w-5 h-5 text-white" />
+              <DollarSign className="w-5 h-5 text-white" />
             </div>
             <p className="text-white font-semibold">
               {carrierData.name} Shipping Rate Calculator
