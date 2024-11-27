@@ -75,8 +75,10 @@ const ContactFormField = ({
             <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
-            {options?.map(({ label, value }) => (
-              <SelectItem value={value}>{label}</SelectItem>
+            {options?.map(({ label, value }, index) => (
+              <SelectItem key={index} value={value}>
+                {label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

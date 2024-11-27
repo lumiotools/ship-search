@@ -85,8 +85,9 @@ const ContactForm = ({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {fields.map((field) => (
+        {fields.map((field, index) => (
           <ContactFormField
+            key={index}
             {...field}
             value={values[field.title]}
             onChange={(value) => setValues({ ...values, [field.title]: value })}
