@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -36,9 +36,6 @@ const ContactForm = ({
   const [values, setValues] = useState<{ [key: string]: string | boolean }>(
     Object.fromEntries(fields.map((field) => [field.title, ""]))
   );
-  // useEffect(() => {
-  //   console.log({ values });
-  // }, [values]);
 
   const isFormFilled = Object.values(values)
     .map((value, i) =>

@@ -56,7 +56,7 @@ export default function ChatPage() {
   const searchPara = useSearchParams();
 
   const [carriersData, setCarriersData] = useState<Carrier[]>([]);
-  //console.log(carriersData);
+  console.log(carriersData);
 
   useEffect(() => {
     const initialUserInput = searchPara.get("message") || "";
