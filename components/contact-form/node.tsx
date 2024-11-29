@@ -62,6 +62,10 @@ function ContactFormNode({ data }: ActiveNodeProps) {
     fetchFormFields();
   }, []);
 
+  // useEffect(() => {
+  //   console.log({contactForm});
+  // }, [contactForm]);
+
   const handleFormSubmit = async (values: {
     [key: string]: string | boolean;
   }) => {
@@ -80,6 +84,7 @@ function ContactFormNode({ data }: ActiveNodeProps) {
           }
         )
       ).json();
+      console.log(response);
 
       if (!response.success) throw new Error(response.message);
 

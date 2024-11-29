@@ -50,7 +50,7 @@ const ContactFormField = ({
         <Input
           className="w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl py-5 text-white placeholder:text-[#808080]"
           value={value.toString()}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {onChange(e.target.value)}}
         />
       )}
       {type === "email" && (
@@ -69,8 +69,8 @@ const ContactFormField = ({
           onChange={(e) => onChange(e.target.value)}
         />
       )}
-      {type === "dropdown" && (
-        <Select>
+      {type === "select" && (
+        <Select onValueChange={(value) => onChange(value)}>
           <SelectTrigger className="w-full bg-prompt-card-input border-prompt-card-input-border rounded-xl py-5 text-white placeholder:text-[#808080]">
             <SelectValue placeholder="Select" />
           </SelectTrigger>
