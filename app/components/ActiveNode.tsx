@@ -21,7 +21,7 @@ const ActiveNode = ({ data }: ActiveNodeProps) => {
     handleContactFormAddNode,
     handleCloseNode,
   } = data;
-  console.log("data ..", data);
+  //console.log("data ..", data);
   try {
     carrierData = JSON.parse(data.message || "");
   } catch (error) {
