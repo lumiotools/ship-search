@@ -63,7 +63,7 @@ function ContactFormNode({ data }: ActiveNodeProps) {
   }, []);
 
   const handleFormSubmit = async (values: {
-    [key: string]: string | boolean;
+    [key: string]: string | boolean | string[];
   }) => {
     setLoading("submit");
     try {

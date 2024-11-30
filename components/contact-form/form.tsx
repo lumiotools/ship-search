@@ -21,7 +21,7 @@ export interface ContactFormType {
 
 interface ContactFormPropType extends ContactFormType {
   loading: boolean;
-  handleFormSubmit: (values: { [key: string]: string | boolean }) => void;
+  handleFormSubmit: (values: { [key: string]: string | boolean | string[] }) => void;
 }
 
 const ContactForm = ({
@@ -33,7 +33,7 @@ const ContactForm = ({
   handleFormSubmit,
 }: ContactFormPropType) => {
   const { toast } = useToast();
-  const [values, setValues] = useState<{ [key: string]: string | boolean }>(
+  const [values, setValues] = useState<{ [key: string]: string | boolean | string[] }>(
     Object.fromEntries(fields.map((field) => [field.title, ""]))
   );
 
@@ -48,7 +48,7 @@ const ContactForm = ({
     .every(Boolean);
 
   const handleFormValuesVerify = (values: {
-    [key: string]: string | boolean;
+    [key: string]: string | boolean | string[];
   }) => {
     const isFilled = Object.values(values)
       .map((value, i) =>

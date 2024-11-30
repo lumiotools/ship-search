@@ -25,8 +25,8 @@ export interface ContactFormFieldType {
 }
 
 interface ContactFormFieldPropType extends ContactFormFieldType {
-  value: string | boolean;
-  onChange: (value: string | boolean) => void;
+  value: string | boolean| string[];
+  onChange: (value: string | boolean | string[]) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
@@ -84,7 +84,38 @@ const ContactFormField = ({
         </Select>
       )}
       {type === "checkbox" && (
-        <div className="flex items-center space-x-2">
+        options ? (
+          <div className="flex flex-col items-start space-x-2">
+            <label
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
+              {options.map(({ label, value: valueOption }, index) => (
+            <div className="flex items-center space-x-2" key={index}>
+              <Checkbox
+                key={index} 
+                checked={(value as string[])?.includes(valueOption) || false}
+                onCheckedChange={(checked) => {
+                  const currentValues = Array.isArray(value) ? value : [];
+                  if (checked) {
+                    onChange([...currentValues, valueOption]);
+                  } else {
+                    onChange(currentValues.filter(v => v !== valueOption));
+                  }
+                }}
+                className="my-3"
+              />
+              <label
+              key={index} 
+            className="m-3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            dangerouslySetInnerHTML={{ __html: label }}
+          />
+            </div>
+            ))}
+            
+          </div>
+        ):
+        (<div className="flex items-center space-x-2">
           <Checkbox
             checked={Boolean(value)}
             onCheckedChange={(checked) => onChange(checked)}
@@ -93,7 +124,7 @@ const ContactFormField = ({
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             dangerouslySetInnerHTML={{ __html: title }}
           />
-        </div>
+        </div>)
       )}
     </div>
   );
