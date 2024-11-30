@@ -91,9 +91,9 @@ const ContactFormField = ({
             dangerouslySetInnerHTML={{ __html: title }}
           />
               {options.map(({ label, value: valueOption }, index) => (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" key={index}>
               <Checkbox
-                key={index}
+                key={index} 
                 checked={(value as string[])?.includes(valueOption) || false}
                 onCheckedChange={(checked) => {
                   const currentValues = Array.isArray(value) ? value : [];
@@ -106,7 +106,7 @@ const ContactFormField = ({
                 className="my-3"
               />
               <label
-              key={index}
+              key={index} 
             className="m-3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             dangerouslySetInnerHTML={{ __html: label }}
           />
